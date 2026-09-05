@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Snippets</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="new-snippet-button" type="button" aria-label="Criar novo snippet"
+                    title="Criar novo snippet">
+                    <i class="ri-add-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">New</span>
+                </button>
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+                <button class="header-button" id="settings-button" type="button" aria-label="Configurações"
+                    title="Configurações">
+                    <i class="ri-settings-3-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Settings</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <aside class="app-sidebar" aria-label="Snippets">
+                <nav class="sidebar-list" data-snippets-list aria-label="Lista de snippets"></nav>
+            </aside>
+
+            <main class="app-main">
+                <div class="main-content">
+                    <div class="main-columns snippets-columns">
+                        <section class="main-column main-column-primary" data-frontmatter-panel aria-live="polite">
+                            <div class="empty-editor-state">Selecione um snippet para editar o frontmatter.</div>
+                        </section>
+                        <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
+                            <textarea class="markdown-editor" data-markdown-editor disabled
+                                aria-label="Conteúdo Markdown">Selecione um snippet para editar o conteúdo.</textarea>
+                        </section>
+                        <section class="main-column main-column-tertiary image-canvas-column">
+                            <div class="image-canvas-stage">
+                                <canvas class="image-canvas" data-snippet-canvas
+                                    aria-label="Pré-visualização do template de snippet" hidden></canvas>
+                                <p class="image-canvas-empty" data-snippet-canvas-empty>Carregando template...</p>
+                            </div>
+                        </section>
+                    </div>
+                    <footer class="main-footer">
+                        <span>Studio</span>
+                        <button class="save-article-button" data-save-snippet type="button" disabled>
+                            <i class="ri-save-line" aria-hidden="true"></i>
+                            <span>Salvar informações</span>
+                        </button>
+                    </footer>
+                </div>
+            </main>
+        </div>
+
+        <div class="folder-status" data-snippets-status role="status" aria-live="polite" aria-hidden="true">
+            <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+            <span class="folder-status-message"></span>
+        </div>
+        <script src="js/folder-store.js"></script>
+        <script src="js/snippets.js"></script>
+</body>
+
+</html>

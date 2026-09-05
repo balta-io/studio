@@ -236,6 +236,10 @@ html.dark .header-button:focus-visible {
     grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr);
 }
 
+.snippets-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+}
+
 .main-column {
     min-width: 0;
     padding: calc(var(--spacing) * 5);
@@ -901,13 +905,18 @@ html.dark .frontmatter-counter {
 }
 
 .markdown-editor {
+    width: 100%;
     flex: 1;
     min-height: 0;
     overflow-y: auto;
     padding: calc(var(--spacing) * 5);
+    border: 0;
+    resize: none;
     outline: 0;
     background: var(--color-background-default-light);
     color: var(--color-foreground-default-light);
+    font-family: "DM Mono", monospace;
+    font-size: var(--text-sm);
 }
 
 .markdown-editor * {
