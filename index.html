@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="brand" href="index.html" aria-label="Studio home">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span class="brand-name">Studio</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+                <button class="header-button" id="settings-button" type="button" aria-label="Configurações"
+                    title="Configurações">
+                    <i class="ri-settings-3-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Settings</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <section class="folder-view" aria-labelledby="folder-title">
+                <div class="folder-view-header">
+                    <div>
+                        <p class="eyebrow">MARKEDITOR STUDIO</p>
+                        <h1 id="folder-title">Choose a workspace</h1>
+                        <p class="folder-description">Open a folder to browse its Markdown projects.</p>
+                    </div>
+                    <button class="open-folder-button" id="open-folder-button" type="button">
+                        <i class="ri-folder-open-line" aria-hidden="true"></i>
+                        <span>OPEN FOLDER</span>
+                    </button>
+                </div>
+                <div class="folder-card-list" id="folder-card-list" aria-live="polite"></div>
+            </section>
+            <div class="folder-status" id="folder-status" role="status" aria-live="polite" aria-hidden="true">
+                <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+                <span class="folder-status-message"></span>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

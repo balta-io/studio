@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Articles</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <label class="header-article-search">
+                    <i class="ri-search-line" aria-hidden="true"></i>
+                    <input type="search" aria-label="Filtrar por título" placeholder="Filtrar por título"
+                        data-article-title-filter>
+                </label>
+                <button class="header-button" id="new-article-button" type="button" aria-label="Criar novo artigo"
+                    title="Criar novo artigo">
+                    <i class="ri-add-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">New</span>
+                </button>
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <aside class="app-sidebar" aria-label="Artigos">
+                <label class="article-filter">
+                    <span>Filtrar artigos</span>
+                    <select data-article-filter>
+                        <option value="all">All</option>
+                        <option value="backlog">Backlog</option>
+                        <option value="todo">Todo</option>
+                        <option value="draft">Draft</option>
+                        <option value="ready">Ready</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="published">Published</option>
+                    </select>
+                </label>
+                <nav class="sidebar-list" data-article-list aria-label="Lista de artigos"></nav>
+            </aside>
+
+            <main class="app-main">
+                <div class="main-content">
+                    <div class="main-columns">
+                        <section class="main-column main-column-primary" data-frontmatter-panel aria-live="polite">
+                            <div class="empty-editor-state">Selecione um artigo para editar o frontmatter.</div>
+                        </section>
+                        <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
+                            <div class="markdown-toolbar" role="toolbar" aria-label="Formatação do conteúdo">
+                                <select data-markdown-block aria-label="Estilo do bloco" disabled>
+                                    <option value="p">Parágrafo</option>
+                                    <option value="h1">Título 1</option>
+                                    <option value="h2">Título 2</option>
+                                    <option value="h3">Título 3</option>
+                                    <option value="blockquote">Citação</option>
+                                </select>
+                                <button type="button" data-markdown-command="bold" aria-label="Negrito" title="Negrito"
+                                    disabled>
+                                    <i class="ri-bold" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-markdown-command="italic" aria-label="Itálico"
+                                    title="Itálico" disabled>
+                                    <i class="ri-italic" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-markdown-command="insertUnorderedList"
+                                    aria-label="Lista com marcadores" title="Lista com marcadores" disabled>
+                                    <i class="ri-list-unordered" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-markdown-command="insertOrderedList"
+                                    aria-label="Lista numerada" title="Lista numerada" disabled>
+                                    <i class="ri-list-ordered-2" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-markdown-link aria-label="Inserir link" title="Inserir link"
+                                    disabled>
+                                    <i class="ri-link" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="markdown-editor" data-markdown-editor contenteditable="false" role="textbox"
+                                aria-multiline="true" aria-label="Conteúdo Markdown">
+                                <p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>
+                            </div>
+                        </section>
+                        <div class="main-column main-column-tertiary">
+                            <section class="tertiary-section">
+                                <h5>Assets</h5>
+                                <ul class="asset-file-list" data-assets-list aria-label="Arquivos de assets"></ul>
+                                <footer class="asset-section-footer">
+                                    <button class="asset-new-button" data-new-asset type="button" disabled>
+                                        <i class="ri-add-line" aria-hidden="true"></i>
+                                        <span>NEW ASSET</span>
+                                    </button>
+                                </footer>
+                            </section>
+                            <section class="tertiary-section">
+                                <h5>Images</h5>
+                                <div class="image-grid" data-images-list aria-label="Imagens do artigo"></div>
+                                <footer class="asset-section-footer">
+                                    <button class="asset-new-button" data-generate-images type="button" disabled>
+                                        <i class="ri-image-add-line" aria-hidden="true"></i>
+                                        <span>GENERATE IMAGES</span>
+                                    </button>
+                                </footer>
+                            </section>
+                        </div>
+                    </div>
+                    <footer class="main-footer">
+                        <button class="save-article-button" data-save-article type="button" disabled>
+                            <i class="ri-save-line" aria-hidden="true"></i>
+                            <span>Salvar informações</span>
+                        </button>
+                    </footer>
+                </div>
+            </main>
+        </div>
+
+        <div class="folder-status" data-sidebar-status role="status" aria-live="polite" aria-hidden="true">
+            <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+            <span class="folder-status-message"></span>
+        </div>
+
+        <dialog class="asset-dialog" data-asset-dialog aria-labelledby="asset-dialog-title">
+            <form class="asset-dialog-form" data-asset-form>
+                <div class="asset-dialog-header">
+                    <input class="asset-dialog-title" id="asset-dialog-title" data-asset-dialog-title
+                        aria-label="Nome do arquivo" type="text" value="Asset">
+                    <button class="asset-dialog-close" data-asset-cancel type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <textarea class="asset-dialog-editor" data-asset-editor aria-label="Conteúdo do asset"></textarea>
+                <div class="asset-dialog-actions">
+                    <button class="asset-dialog-button asset-dialog-delete" data-asset-delete type="button">
+                        <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                        <span>DELETE</span>
+                    </button>
+                    <button class="asset-dialog-button" data-asset-cancel type="button">Cancelar</button>
+                    <button class="asset-dialog-button asset-dialog-save" data-asset-save type="submit">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </dialog>
+
+        <dialog class="asset-dialog" data-image-dialog aria-labelledby="image-dialog-title">
+            <div class="asset-dialog-form">
+                <div class="asset-dialog-header">
+                    <h2 id="image-dialog-title" data-image-dialog-title>Imagem</h2>
+                    <button class="asset-dialog-close" data-image-dialog-close type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <img class="image-dialog-preview" data-image-dialog-preview alt="">
+                <div class="asset-dialog-actions">
+                    <button class="asset-dialog-button asset-dialog-delete" data-image-delete type="button">
+                        <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                        <span>DELETE IMAGE</span>
+                    </button>
+                </div>
+            </div>
+        </dialog>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/lib/turndown.browser.umd.min.js"></script>
+    <script src="js/folder-store.js"></script>
+    <script src="js/articles.js"></script>
+</body>
+
+</html>

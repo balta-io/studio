@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Images</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" data-back-link href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="main-content">
+                <div class="main-columns main-columns-two">
+                    <section class="main-column main-column-primary" data-frontmatter-panel aria-live="polite">
+                        <div class="empty-editor-state">Carregando informações do item...</div>
+                    </section>
+                    <section class="main-column main-column-secondary image-canvas-column">
+                        <div class="image-canvas-stage">
+                            <canvas class="image-canvas" data-image-canvas
+                                aria-label="Pré-visualização da imagem selecionada" hidden></canvas>
+                            <p class="image-canvas-empty" data-image-canvas-empty>Selecione uma imagem para visualizar.
+                            </p>
+                        </div>
+                    </section>
+                    <section class="main-column main-column-tertiary">
+                        <section class="tertiary-section" data-template-node="title">
+                            <strong>Title</strong>
+                        </section>
+                        <section class="tertiary-section" data-template-node="summary">
+                            <strong>Summary</strong>
+                        </section>
+                    </section>
+                </div>
+                <footer class="main-footer">
+                    <button class="save-article-button" data-save-frontmatter type="button" disabled>
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span>SAVE TEMPLATE</span>
+                    </button>
+                    <button class="save-article-button" data-export-image type="button" disabled>
+                        <i class="ri-download-line" aria-hidden="true"></i>
+                        <span>DOWNLOAD</span>
+                    </button>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="folder-status" data-page-status role="status" aria-live="polite" aria-hidden="true">
+        <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+        <span class="folder-status-message"></span>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/images.js"></script>
+</body>
+
+</html>
