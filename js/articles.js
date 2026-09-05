@@ -17,6 +17,7 @@ const imageDialogTitle = document.querySelector('[data-image-dialog-title]');
 const imageDialogPreview = document.querySelector('[data-image-dialog-preview]');
 const imageDialogCloseButton = document.querySelector('[data-image-dialog-close]');
 const imageDeleteButton = document.querySelector('[data-image-delete]');
+const imageDownloadButton = document.querySelector('[data-image-download]');
 const assetDialog = document.querySelector('[data-asset-dialog]');
 const assetDialogForm = document.querySelector('[data-asset-form]');
 const assetDialogTitle = document.querySelector('[data-asset-dialog-title]');
@@ -25,6 +26,7 @@ const assetSaveButton = document.querySelector('[data-asset-save]');
 const assetDeleteButton = document.querySelector('[data-asset-delete]');
 const assetCancelButtons = document.querySelectorAll('[data-asset-cancel]');
 const saveArticleButton = document.querySelector('[data-save-article]');
+const deleteArticleButton = document.querySelector('[data-delete-article]');
 const articleStatusFilterStorageKey = 'studio-article-status-filter';
 const lastSelectedArticleStorageKey = `studio-${sectionSlug}-last-article`;
 const articleStatuses = ['backlog', 'todo', 'draft', 'ready', 'scheduled', 'published'];
@@ -116,8 +118,17 @@ function renderAssetFiles(fileNames) {
         const fileButton = document.createElement('button');
         fileButton.className = 'asset-file-button';
         fileButton.type = 'button';
-        fileButton.textContent = fileName;
         fileButton.dataset.assetName = fileName;
+
+        const icon = document.createElement('i');
+        icon.className = 'ri-file-text-line asset-file-icon';
+        icon.setAttribute('aria-hidden', 'true');
+
+        const name = document.createElement('span');
+        name.className = 'asset-file-name';
+        name.textContent = fileName;
+
+        fileButton.append(icon, name);
         fileItem.append(fileButton);
         assetsList.append(fileItem);
     }
@@ -331,6 +342,17 @@ async function deleteImage() {
     }
 }
 
+function downloadImage() {
+    if (!selectedImage) {
+        return;
+    }
+
+    const link = document.createElement('a');
+    link.href = selectedImage.url;
+    link.download = selectedImage.name;
+    link.click();
+}
+
 async function loadImageFiles(articleHandle) {
     try {
         const imagesHandle = await articleHandle.getDirectoryHandle('images');
@@ -357,6 +379,56 @@ function goToGenerateImages() {
 
     const params = new URLSearchParams({ type: 'articles', content: selectedArticle.folderName });
     location.href = `images.html?${params.toString()}`;
+}
+
+function resetArticleEditor() {
+    for (const file of currentImageFiles) {
+        URL.revokeObjectURL(file.url);
+    }
+
+    selectedArticle = null;
+    selectedAsset = null;
+    selectedImage = null;
+    currentImageFiles = [];
+    localStorage.removeItem(lastSelectedArticleStorageKey);
+    frontmatterPanel.innerHTML = '<div class="empty-editor-state">Selecione um artigo para editar o frontmatter.</div>';
+    markdownEditor.innerHTML = '<p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>';
+    markdownEditor.contentEditable = 'false';
+    markdownEditorDirty = false;
+    markdownToolbar.querySelectorAll('button, select').forEach(control => {
+        control.disabled = true;
+    });
+    renderAssetFiles([]);
+    renderImageFiles([]);
+    saveArticleButton.disabled = true;
+    deleteArticleButton.disabled = true;
+    newAssetButton.disabled = true;
+    generateImagesButton.disabled = true;
+}
+
+async function deleteArticle() {
+    if (!selectedArticle || !window.confirm(`Excluir o artigo "${selectedArticle.folderName}" e todo o seu conteúdo?`)) {
+        return;
+    }
+
+    deleteArticleButton.disabled = true;
+    try {
+        const rootHandle = await getSavedFolderHandle();
+        const permission = await rootHandle.requestPermission({ mode: 'readwrite' });
+        if (permission !== 'granted') {
+            throw new Error('Conceda acesso de escrita à pasta para excluir o artigo.');
+        }
+
+        const deletedFolderName = selectedArticle.folderName;
+        await selectedArticle.sectionHandle.removeEntry(deletedFolderName, { recursive: true });
+        currentArticles = currentArticles.filter(article => article.folderName !== deletedFolderName);
+        resetArticleEditor();
+        renderArticleList(currentArticles);
+        setSidebarStatus(`Artigo "${deletedFolderName}" excluído.`, 'success');
+    } catch (error) {
+        setSidebarStatus(error.message || 'Não foi possível excluir o artigo.', 'error');
+        deleteArticleButton.disabled = false;
+    }
 }
 
 function getEditedMarkdown() {
@@ -482,6 +554,7 @@ async function selectArticle(folderName) {
         generateImagesButton.disabled = false;
         renderFrontmatterEditor(frontmatter);
         renderMarkdownEditor(frontmatter.body);
+        deleteArticleButton.disabled = false;
         await loadAssetFiles(articleHandle);
         await loadImageFiles(articleHandle);
         renderArticleList(currentArticles, folderName);
@@ -830,6 +903,7 @@ if (articleStatusFilter) {
 }
 
 saveArticleButton?.addEventListener('click', saveArticle);
+deleteArticleButton?.addEventListener('click', deleteArticle);
 newAssetButton?.addEventListener('click', openNewAssetDialog);
 generateImagesButton?.addEventListener('click', goToGenerateImages);
 
@@ -862,6 +936,7 @@ imagesList?.addEventListener('click', event => {
 });
 
 imageDeleteButton?.addEventListener('click', deleteImage);
+imageDownloadButton?.addEventListener('click', downloadImage);
 imageDialogCloseButton?.addEventListener('click', () => {
     selectedImage = null;
     imageDialog.close();

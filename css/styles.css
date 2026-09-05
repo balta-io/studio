@@ -211,7 +211,8 @@ html.dark .header-button:focus-visible {
     display: flex;
     flex: 1;
     min-width: 0;
-    min-height: calc(100dvh - var(--app-header-height));
+    height: calc(100dvh - var(--app-header-height));
+    min-height: 0;
     padding: calc(var(--spacing) * 12) calc(var(--spacing) * 8);
 }
 
@@ -219,7 +220,8 @@ html.dark .header-button:focus-visible {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
     width: 100%;
-    min-height: calc(100dvh - var(--app-header-height) - calc(var(--spacing) * 24));
+    height: 100%;
+    min-height: 0;
 }
 
 .main-columns {
@@ -303,27 +305,55 @@ html.dark .image-canvas-empty {
 }
 
 .asset-file-list li {
-    font-size: var(--text-sm);
+    display: flex;
+}
+
+.asset-file-list li+li {
+    margin-top: calc(var(--spacing) * 1);
 }
 
 .asset-file-button {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
     width: 100%;
-    padding: calc(var(--spacing) * 1.5) 0;
+    padding: calc(var(--spacing) * 3) calc(var(--spacing) * 2);
+    border: 1px solid transparent;
     overflow-wrap: anywhere;
     background: transparent;
-    color: inherit;
+    color: var(--color-foreground-subtle-light);
     cursor: pointer;
+    font-size: var(--text-sm);
     text-align: left;
+    transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
 }
 
 .asset-file-button:hover,
 .asset-file-button:focus-visible {
-    color: var(--color-action-primary-default-light);
+    border-color: var(--color-border-default-light);
+    background: var(--color-action-ghost-hover-light);
+    color: var(--color-foreground-strong-light);
+}
+
+html.dark .asset-file-button {
+    color: var(--color-foreground-subtle-dark);
 }
 
 html.dark .asset-file-button:hover,
 html.dark .asset-file-button:focus-visible {
-    color: var(--color-action-primary-default-dark);
+    border-color: var(--color-border-default-dark);
+    background: var(--color-action-ghost-hover-dark);
+    color: var(--color-foreground-strong-dark);
+}
+
+.asset-file-icon {
+    flex: 0 0 auto;
+    font-size: 18px;
+}
+
+.asset-file-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .image-grid {
@@ -668,6 +698,11 @@ html.dark .asset-dialog-title:focus {
     color: var(--color-foreground-on-light);
 }
 
+.asset-dialog-download {
+    background: var(--color-action-primary-default-light);
+    color: var(--color-foreground-on-light);
+}
+
 .asset-dialog-delete {
     margin-right: auto;
     background: #dc2626;
@@ -684,6 +719,11 @@ html.dark .asset-dialog-save {
     color: var(--color-foreground-on-dark);
 }
 
+html.dark .asset-dialog-download {
+    background: var(--color-action-primary-default-dark);
+    color: var(--color-foreground-on-dark);
+}
+
 .tertiary-section+.tertiary-section {
     border-top: 1px solid var(--color-border-default-light);
     padding-top: calc(var(--spacing) * 5);
@@ -696,7 +736,7 @@ html.dark .tertiary-section+.tertiary-section {
 .main-footer {
     display: flex;
     gap: calc(var(--spacing) * 2);
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: calc(var(--spacing) * 5);
     color: var(--color-foreground-subtle-light);
 }
@@ -816,6 +856,7 @@ html.dark .frontmatter-counter {
     display: flex;
     min-height: 0;
     padding: 0;
+    overflow: hidden;
     flex-direction: column;
 }
 
@@ -861,37 +902,21 @@ html.dark .frontmatter-counter {
 
 .markdown-editor {
     flex: 1;
-    min-height: calc(var(--spacing) * 80);
+    min-height: 0;
     overflow-y: auto;
     padding: calc(var(--spacing) * 5);
     outline: 0;
+    background: var(--color-background-default-light);
     color: var(--color-foreground-default-light);
-    font-family: var(--font-serif);
-    line-height: 1.65;
+}
+
+.markdown-editor * {
+    all: revert;
 }
 
 .markdown-editor:focus {
-    box-shadow: inset 0 0 0 2px var(--color-border-primary-default-light);
-}
-
-.markdown-editor h1,
-.markdown-editor h2,
-.markdown-editor h3 {
-    color: var(--color-foreground-strong-light);
-    letter-spacing: 0;
-}
-
-.markdown-editor img {
-    max-width: 100%;
-    height: auto;
-}
-
-.markdown-editor pre,
-.markdown-editor blockquote {
-    overflow-x: auto;
-    padding: calc(var(--spacing) * 3);
-    border-left: 3px solid var(--color-border-primary-default-light);
-    background: var(--color-background-default-light);
+    outline: 2px solid var(--color-border-primary-default-light);
+    outline-offset: -2px;
 }
 
 html.dark .markdown-toolbar {
@@ -906,23 +931,12 @@ html.dark .markdown-toolbar select {
 }
 
 html.dark .markdown-editor {
+    background: var(--color-background-default-dark);
     color: var(--color-foreground-default-dark);
 }
 
 html.dark .markdown-editor:focus {
-    box-shadow: inset 0 0 0 2px var(--color-border-primary-default-dark);
-}
-
-html.dark .markdown-editor h1,
-html.dark .markdown-editor h2,
-html.dark .markdown-editor h3 {
-    color: var(--color-foreground-strong-dark);
-}
-
-html.dark .markdown-editor pre,
-html.dark .markdown-editor blockquote {
-    border-left-color: var(--color-border-primary-default-dark);
-    background: var(--color-background-default-dark);
+    outline-color: var(--color-border-primary-default-dark);
 }
 
 .save-article-button {
@@ -945,6 +959,31 @@ html.dark .markdown-editor blockquote {
 }
 
 .save-article-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.delete-article-button {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+    min-height: calc(var(--spacing) * 11);
+    padding: 0 calc(var(--spacing) * 4);
+    border: 1px solid #dc2626;
+    cursor: pointer;
+    background: transparent;
+    color: #dc2626;
+    font-size: var(--text-sm);
+    transition: background-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.delete-article-button:hover,
+.delete-article-button:focus-visible {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.delete-article-button:disabled {
     cursor: not-allowed;
     opacity: 0.45;
 }
