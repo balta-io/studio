@@ -432,9 +432,6 @@ async function deleteArticle() {
 }
 
 function getEditedMarkdown() {
-    if (!markdownEditorDirty) {
-        return selectedArticle.frontmatter.body;
-    }
     if (!window.TurndownService) {
         throw new Error('Não foi possível converter o conteúdo para Markdown.');
     }
