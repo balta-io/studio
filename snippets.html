@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
     <title>Studio | Snippets</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/theme.js"></script>
@@ -49,19 +50,46 @@
                             <div class="empty-editor-state">Selecione um snippet para editar o frontmatter.</div>
                         </section>
                         <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
+                            <div class="markdown-language-bar">
+                                <label class="markdown-language-label" for="snippet-language-select">
+                                    Linguagem
+                                </label>
+                                <select class="markdown-language-select" id="snippet-language-select"
+                                    data-snippet-language disabled aria-label="Linguagem do snippet">
+                                    <option value="csharp">C#</option>
+                                </select>
+                            </div>
                             <textarea class="markdown-editor" data-markdown-editor disabled
                                 aria-label="Conteúdo Markdown">Selecione um snippet para editar o conteúdo.</textarea>
                         </section>
                         <section class="main-column main-column-tertiary image-canvas-column">
-                            <div class="image-canvas-stage">
-                                <canvas class="image-canvas" data-snippet-canvas
-                                    aria-label="Pré-visualização do template de snippet" hidden></canvas>
-                                <p class="image-canvas-empty" data-snippet-canvas-empty>Carregando template...</p>
-                            </div>
+                            <section class="tertiary-section snippet-assets-section">
+                                <h5>Assets</h5>
+                                <ul class="asset-file-list" data-snippet-assets-list aria-label="Arquivos de assets">
+                                </ul>
+                                <footer class="asset-section-footer">
+                                    <button class="asset-new-button" data-new-snippet-asset type="button" disabled>
+                                        <i class="ri-add-line" aria-hidden="true"></i>
+                                        <span>NEW</span>
+                                    </button>
+                                </footer>
+                            </section>
+                            <section class="tertiary-section snippet-images-section">
+                                <h5>Images</h5>
+                                <div class="image-grid" data-snippet-images-list aria-label="Imagens do snippet"></div>
+                            </section>
+                            <p class="image-canvas-empty snippet-canvas-status" data-snippet-canvas-empty>Carregando
+                                template...</p>
+                            <button class="snippet-preview-button" data-snippet-preview type="button" disabled>
+                                GENERATE
+                            </button>
                         </section>
                     </div>
                     <footer class="main-footer">
-                        <span>Studio</span>
+                        <button class="delete-article-button" data-delete-snippet type="button" disabled>
+                            <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                            <span>DELETE</span>
+                        </button>
                         <button class="save-article-button" data-save-snippet type="button" disabled>
                             <i class="ri-save-line" aria-hidden="true"></i>
                             <span>Salvar informações</span>
@@ -75,7 +103,85 @@
             <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
             <span class="folder-status-message"></span>
         </div>
+
+        <dialog class="asset-dialog" data-snippet-asset-dialog aria-labelledby="snippet-asset-dialog-title">
+            <form class="asset-dialog-form" data-snippet-asset-form>
+                <div class="asset-dialog-header">
+                    <input class="asset-dialog-title" id="snippet-asset-dialog-title" data-snippet-asset-dialog-title
+                        aria-label="Nome do arquivo" type="text" value="Asset">
+                    <button class="asset-dialog-close" data-snippet-asset-cancel type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <textarea class="asset-dialog-editor" data-snippet-asset-editor
+                    aria-label="Conteúdo do asset"></textarea>
+                <div class="asset-dialog-actions">
+                    <button class="asset-dialog-button asset-dialog-delete" data-snippet-asset-delete type="button">
+                        <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                        <span>DELETE</span>
+                    </button>
+                    <button class="asset-dialog-button" data-snippet-asset-cancel type="button">Cancelar</button>
+                    <button class="asset-dialog-button asset-dialog-save" data-snippet-asset-save type="submit">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </dialog>
+
+        <dialog class="asset-dialog snippet-preview-dialog" data-snippet-preview-dialog
+            aria-labelledby="snippet-preview-title">
+            <div class="snippet-preview-form">
+                <div class="asset-dialog-header">
+                    <h2 id="snippet-preview-title">Preview</h2>
+                    <button class="asset-dialog-close" data-snippet-preview-close type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="snippet-preview-scroll">
+                    <canvas class="image-canvas" data-snippet-canvas
+                        aria-label="Pré-visualização do template de snippet" hidden></canvas>
+                </div>
+                <div class="asset-dialog-actions">
+                    <button class="asset-dialog-button" data-snippet-export type="button">EXPORT</button>
+                    <button class="asset-dialog-button asset-dialog-save" data-snippet-save-image
+                        type="button">SAVE</button>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog class="asset-dialog snippet-image-dialog" data-snippet-image-dialog
+            aria-labelledby="snippet-image-dialog-title">
+            <div class="asset-dialog-form snippet-image-dialog-form">
+                <div class="asset-dialog-header">
+                    <h2 id="snippet-image-dialog-title" data-snippet-image-dialog-title>Imagem</h2>
+                    <button class="asset-dialog-close" data-snippet-image-dialog-close type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <img class="image-dialog-preview snippet-image-dialog-preview" data-snippet-image-dialog-preview alt="">
+                <div class="asset-dialog-actions">
+                    <button class="asset-dialog-button asset-dialog-delete" data-snippet-image-delete type="button">
+                        <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                        <span>DELETE</span>
+                    </button>
+                    <button class="asset-dialog-button asset-dialog-save" data-snippet-image-regenerate type="button">
+                        <i class="ri-image-add-line" aria-hidden="true"></i>
+                        <span>RE-GENERATE</span>
+                    </button>
+                    <button class="asset-dialog-button asset-dialog-download" data-snippet-image-download type="button">
+                        <i class="ri-download-2-line" aria-hidden="true"></i>
+                        <span>DOWNLOAD</span>
+                    </button>
+                </div>
+            </div>
+        </dialog>
         <script src="js/folder-store.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-csharp.min.js"></script>
         <script src="js/snippets.js"></script>
 </body>
 
