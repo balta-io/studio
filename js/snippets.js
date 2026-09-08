@@ -29,7 +29,18 @@ const snippetImageDownloadButton = document.querySelector('[data-snippet-image-d
 const snippetCanvas = document.querySelector('[data-snippet-canvas]');
 const snippetCanvasEmpty = document.querySelector('[data-snippet-canvas-empty]');
 const snippetStatuses = ['backlog', 'todo', 'draft', 'ready', 'scheduled', 'published'];
-const lastSelectedSnippetStorageKey = 'studio-snippets-last-snippet';
+const snippetConfig = {
+    collectionFolderName: 'snippets',
+    storageKey: 'studio-snippets-last-snippet',
+    singularLabel: 'snippet',
+    pluralLabel: 'snippets',
+    titlePrefix: 'Snippet',
+    slugPrefix: 'snippet',
+    templateImageFile: 'snippet.png',
+    listIconClass: 'ri-code-s-slash-line',
+    ...window.studioSnippetsConfig
+};
+const lastSelectedSnippetStorageKey = snippetConfig.storageKey;
 let selectedSnippet = null;
 let selectedSnippetAsset = null;
 let markdownEditorDirty = false;
@@ -112,7 +123,7 @@ async function loadSnippetTemplateImage() {
 
     const assetsHandle = await rootHandle.getDirectoryHandle('_assets');
     const templatesHandle = await assetsHandle.getDirectoryHandle('templates');
-    const imageHandle = await templatesHandle.getFileHandle('snippet.png');
+    const imageHandle = await templatesHandle.getFileHandle(snippetConfig.templateImageFile);
     const imageFile = await imageHandle.getFile();
     const imageUrl = URL.createObjectURL(imageFile);
     const image = new Image();
@@ -375,7 +386,7 @@ async function saveSnippetImage() {
 
         const slug = getSnippetSlug();
         if (!slug) {
-            throw new Error('O snippet não possui um slug para nomear a imagem.');
+            throw new Error(`O ${snippetConfig.singularLabel} não possui um slug para nomear a imagem.`);
         }
 
         const imagesHandle = await selectedSnippet.handle.getDirectoryHandle('images', { create: true });
@@ -701,7 +712,7 @@ function renderSnippetList(snippets, selectedSnippetName = null) {
     if (!snippets.length) {
         const emptyMessage = document.createElement('p');
         emptyMessage.className = 'sidebar-empty-message';
-        emptyMessage.textContent = 'Nenhum snippet encontrado.';
+        emptyMessage.textContent = `Nenhum ${snippetConfig.singularLabel} encontrado.`;
         snippetsListElement.append(emptyMessage);
         return;
     }
@@ -717,7 +728,7 @@ function renderSnippetList(snippets, selectedSnippetName = null) {
         item.setAttribute('role', 'listitem');
 
         const icon = document.createElement('i');
-        icon.className = 'ri-code-s-slash-line sidebar-article-icon';
+        icon.className = `${snippetConfig.listIconClass} sidebar-article-icon`;
         icon.setAttribute('aria-hidden', 'true');
 
         const details = document.createElement('span');
@@ -739,7 +750,7 @@ function renderSnippetList(snippets, selectedSnippetName = null) {
 
 async function loadSnippets(selectedSnippetName = null) {
     snippetsListElement.replaceChildren();
-    setSnippetsStatus('Carregando snippets...');
+    setSnippetsStatus(`Carregando ${snippetConfig.pluralLabel}...`);
 
     const rootHandle = await getSavedFolderHandle();
     if (!rootHandle) {
@@ -749,15 +760,15 @@ async function loadSnippets(selectedSnippetName = null) {
 
     const permission = await rootHandle.queryPermission({ mode: 'read' });
     if (permission !== 'granted') {
-        setSnippetsStatus('Conceda acesso à pasta para carregar os snippets.', 'error');
+        setSnippetsStatus(`Conceda acesso à pasta para carregar os ${snippetConfig.pluralLabel}.`, 'error');
         return;
     }
 
     let snippetsHandle;
     try {
-        snippetsHandle = await rootHandle.getDirectoryHandle('snippets');
+        snippetsHandle = await rootHandle.getDirectoryHandle(snippetConfig.collectionFolderName);
     } catch (error) {
-        setSnippetsStatus('A pasta "snippets" não foi encontrada.', 'error');
+        setSnippetsStatus(`A pasta "${snippetConfig.collectionFolderName}" não foi encontrada.`, 'error');
         return;
     }
 
@@ -786,7 +797,7 @@ async function loadSnippets(selectedSnippetName = null) {
     if (selectedSnippetName && snippets.some(snippet => snippet.folderName === selectedSnippetName)) {
         await selectSnippet(selectedSnippetName);
     }
-    setSnippetsStatus(`${snippets.length} snippet(s) encontrado(s).`, 'success');
+    setSnippetsStatus(formatSnippetCount(snippets.length), 'success');
 }
 
 function parseSnippetFrontmatter(markdown) {
@@ -823,7 +834,7 @@ function renderFrontmatterEditor(frontmatter) {
     if (!frontmatter.entries.length) {
         const message = document.createElement('div');
         message.className = 'empty-editor-state';
-        message.textContent = 'Este snippet não possui um frontmatter editável.';
+        message.textContent = `Este ${snippetConfig.singularLabel} não possui um frontmatter editável.`;
         frontmatterPanel.append(message);
         saveSnippetButton.disabled = true;
         return;
@@ -913,7 +924,7 @@ async function selectSnippet(snippetName) {
     }
 
     try {
-        const snippetsHandle = await rootHandle.getDirectoryHandle('snippets');
+        const snippetsHandle = await rootHandle.getDirectoryHandle(snippetConfig.collectionFolderName);
         const snippetHandle = await snippetsHandle.getDirectoryHandle(snippetName);
         const indexFileHandle = await snippetHandle.getFileHandle('index.md');
         const markdown = await (await indexFileHandle.getFile()).text();
@@ -931,7 +942,7 @@ async function selectSnippet(snippetName) {
         renderSnippetList([...snippetsListElement.querySelectorAll('[data-snippet-name]')]
             .map(item => ({ folderName: item.dataset.snippetName, title: item.querySelector('.sidebar-article-title').textContent })), snippetName);
     } catch (error) {
-        setSnippetsStatus(error.message || 'Não foi possível abrir o snippet.', 'error');
+        setSnippetsStatus(error.message || `Não foi possível abrir o ${snippetConfig.singularLabel}.`, 'error');
     }
 }
 
@@ -984,7 +995,7 @@ async function saveSnippet() {
 
         const permission = await rootHandle.requestPermission({ mode: 'readwrite' });
         if (permission !== 'granted') {
-            throw new Error('Conceda acesso de escrita à pasta para salvar o snippet.');
+            throw new Error(`Conceda acesso de escrita à pasta para salvar o ${snippetConfig.singularLabel}.`);
         }
 
         const fields = frontmatterPanel.querySelectorAll('[data-frontmatter-key]');
@@ -1008,7 +1019,7 @@ async function saveSnippet() {
 
         let snippetHandle = selectedSnippet.handle;
         if (newFolderName !== selectedSnippet.name) {
-            const snippetsHandle = await rootHandle.getDirectoryHandle('snippets');
+            const snippetsHandle = await rootHandle.getDirectoryHandle(snippetConfig.collectionFolderName);
             snippetHandle = await renameSnippetFolder(snippetsHandle, selectedSnippet.name, newFolderName);
         }
 
@@ -1022,16 +1033,16 @@ async function saveSnippet() {
         markdownEditorDirty = false;
         localStorage.setItem(lastSelectedSnippetStorageKey, newFolderName);
         await loadSnippets(newFolderName);
-        setSnippetsStatus(`Snippet "${newFolderName}" salvo.`, 'success');
+        setSnippetsStatus(`${snippetConfig.titlePrefix} "${newFolderName}" salvo.`, 'success');
     } catch (error) {
-        setSnippetsStatus(error.message || 'Não foi possível salvar o snippet.', 'error');
+        setSnippetsStatus(error.message || `Não foi possível salvar o ${snippetConfig.singularLabel}.`, 'error');
     } finally {
         saveSnippetButton.disabled = false;
     }
 }
 
 async function deleteSnippet() {
-    if (!selectedSnippet || !window.confirm(`Excluir o snippet "${selectedSnippet.name}" e todo o seu conteúdo?`)) {
+    if (!selectedSnippet || !window.confirm(`Excluir o ${snippetConfig.singularLabel} "${selectedSnippet.name}" e todo o seu conteúdo?`)) {
         return;
     }
 
@@ -1044,18 +1055,18 @@ async function deleteSnippet() {
 
         const permission = await rootHandle.requestPermission({ mode: 'readwrite' });
         if (permission !== 'granted') {
-            throw new Error('Conceda acesso de escrita à pasta para excluir o snippet.');
+            throw new Error(`Conceda acesso de escrita à pasta para excluir o ${snippetConfig.singularLabel}.`);
         }
 
         const deletedFolderName = selectedSnippet.name;
-        const snippetsHandle = await rootHandle.getDirectoryHandle('snippets');
+        const snippetsHandle = await rootHandle.getDirectoryHandle(snippetConfig.collectionFolderName);
         await snippetsHandle.removeEntry(deletedFolderName, { recursive: true });
         selectedSnippet = null;
         selectedSnippetAsset = null;
         selectedSnippetImage = null;
         localStorage.removeItem(lastSelectedSnippetStorageKey);
         frontmatterPanel.replaceChildren();
-        markdownEditor.value = 'Selecione um snippet para editar o conteúdo.';
+        markdownEditor.value = `Selecione um ${snippetConfig.singularLabel} para editar o conteúdo.`;
         markdownEditor.disabled = true;
         renderSnippetAssetFiles([]);
         newSnippetAssetButton.disabled = true;
@@ -1064,9 +1075,9 @@ async function deleteSnippet() {
         saveSnippetButton.disabled = true;
         snippetPreviewButton.disabled = true;
         await loadSnippets();
-        setSnippetsStatus(`Snippet "${deletedFolderName}" excluído.`, 'success');
+        setSnippetsStatus(`${snippetConfig.titlePrefix} "${deletedFolderName}" excluído.`, 'success');
     } catch (error) {
-        setSnippetsStatus(error.message || 'Não foi possível excluir o snippet.', 'error');
+        setSnippetsStatus(error.message || `Não foi possível excluir o ${snippetConfig.singularLabel}.`, 'error');
         deleteSnippetButton.disabled = false;
     }
 }
@@ -1087,8 +1098,8 @@ function createSnippetTitleAndSlug(date = new Date()) {
     const pad = value => String(value).padStart(2, '0');
     const datePart = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     const timePart = `${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
-    const title = `Snippet - ${datePart} ${timePart.replaceAll('-', ':')}`;
-    const slug = `snippet_${datePart}_${timePart}`;
+    const title = `${snippetConfig.titlePrefix} - ${datePart} ${timePart.replaceAll('-', ':')}`;
+    const slug = `${snippetConfig.slugPrefix}_${datePart}_${timePart}`;
 
     return { title, slug };
 }
@@ -1102,7 +1113,7 @@ async function createSnippet() {
 
     const permission = await rootHandle.requestPermission({ mode: 'readwrite' });
     if (permission !== 'granted') {
-        setSnippetsStatus('Conceda acesso de escrita à pasta para criar um snippet.', 'error');
+        setSnippetsStatus(`Conceda acesso de escrita à pasta para criar um ${snippetConfig.singularLabel}.`, 'error');
         return;
     }
 
@@ -1113,11 +1124,11 @@ async function createSnippet() {
     }
 
     newSnippetButton.disabled = true;
-    setSnippetsStatus('Criando novo snippet...');
+    setSnippetsStatus(`Criando novo ${snippetConfig.singularLabel}...`);
 
     try {
         const { title, slug } = createSnippetTitleAndSlug();
-        const snippetsHandle = await rootHandle.getDirectoryHandle('snippets', { create: true });
+        const snippetsHandle = await rootHandle.getDirectoryHandle(snippetConfig.collectionFolderName, { create: true });
         const snippetHandle = await snippetsHandle.getDirectoryHandle(slug, { create: true });
         await snippetHandle.getDirectoryHandle('assets', { create: true });
         await snippetHandle.getDirectoryHandle('images', { create: true });
@@ -1128,14 +1139,14 @@ async function createSnippet() {
 
         await loadSnippets(slug);
     } catch (error) {
-        setSnippetsStatus(error.message || 'Não foi possível criar o novo snippet.', 'error');
+        setSnippetsStatus(error.message || `Não foi possível criar o novo ${snippetConfig.singularLabel}.`, 'error');
     } finally {
         newSnippetButton.disabled = false;
     }
 }
 
 loadSnippets(localStorage.getItem(lastSelectedSnippetStorageKey)).catch(error => {
-    setSnippetsStatus(error.message || 'Não foi possível carregar os snippets.', 'error');
+    setSnippetsStatus(error.message || `Não foi possível carregar os ${snippetConfig.pluralLabel}.`, 'error');
 });
 
 loadSnippetTemplateImage().catch(error => {
