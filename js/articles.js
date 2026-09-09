@@ -6,7 +6,11 @@ const articleTitleFilter = document.querySelector('[data-article-title-filter]')
 const articleStatusFilter = document.querySelector('[data-article-filter]');
 const frontmatterPanel = document.querySelector('[data-frontmatter-panel]');
 const markdownEditor = document.querySelector('[data-markdown-editor]');
-const markdownToolbar = document.querySelector('[data-markdown-panel] .markdown-toolbar');
+const markdownPreviewButton = document.querySelector('[data-markdown-preview]');
+const markdownPreviewDialog = document.querySelector('[data-markdown-preview-dialog]');
+const markdownPreviewContent = document.querySelector('[data-markdown-preview-content]');
+const markdownPreviewShadowRoot = markdownPreviewContent?.attachShadow({ mode: 'open' });
+const markdownPreviewCloseButton = document.querySelector('[data-markdown-preview-close]');
 const assetsList = document.querySelector('[data-assets-list]');
 const newAssetButton = document.querySelector('[data-new-asset]');
 const imagesList = document.querySelector('[data-images-list]');
@@ -87,19 +91,13 @@ function extractArticleMetadata(markdown) {
     return Object.fromEntries(parseArticleFrontmatter(markdown).entries.map(entry => [entry.key, entry.value]));
 }
 
-function renderMarkdownEditor(markdown) {
-    if (!window.marked || !window.DOMPurify) {
-        throw new Error('Não foi possível carregar o editor Markdown.');
-    }
+const datetimeFrontmatterKeys = ['published_at_utc'];
 
-    window.marked.use({ gfm: true, breaks: false });
-    const renderedMarkdown = window.marked.parse(markdown);
-    markdownEditor.innerHTML = window.DOMPurify.sanitize(renderedMarkdown) || '<p><br></p>';
+function renderMarkdownEditor(markdown) {
+    markdownEditor.textContent = markdown;
     markdownEditor.contentEditable = 'true';
-    markdownToolbar.querySelectorAll('button, select').forEach(control => {
-        control.disabled = false;
-    });
     markdownEditorDirty = false;
+    markdownPreviewButton.disabled = false;
 }
 
 function renderAssetFiles(fileNames) {
@@ -392,12 +390,10 @@ function resetArticleEditor() {
     currentImageFiles = [];
     localStorage.removeItem(lastSelectedArticleStorageKey);
     frontmatterPanel.innerHTML = '<div class="empty-editor-state">Selecione um artigo para editar o frontmatter.</div>';
-    markdownEditor.innerHTML = '<p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>';
+    markdownEditor.textContent = 'Selecione um artigo para editar o conteúdo.';
     markdownEditor.contentEditable = 'false';
     markdownEditorDirty = false;
-    markdownToolbar.querySelectorAll('button, select').forEach(control => {
-        control.disabled = true;
-    });
+    markdownPreviewButton.disabled = true;
     renderAssetFiles([]);
     renderImageFiles([]);
     saveArticleButton.disabled = true;
@@ -432,18 +428,7 @@ async function deleteArticle() {
 }
 
 function getEditedMarkdown() {
-    if (!window.TurndownService) {
-        throw new Error('Não foi possível converter o conteúdo para Markdown.');
-    }
-
-    const turndownService = new window.TurndownService({
-        bulletListMarker: '-',
-        codeBlockStyle: 'fenced',
-        emDelimiter: '*',
-        headingStyle: 'atx',
-        strongDelimiter: '**'
-    });
-    const markdown = turndownService.turndown(markdownEditor.innerHTML).trim();
+    const markdown = markdownEditor.textContent.trim();
     return markdown ? `${markdown}\n` : '';
 }
 
@@ -489,11 +474,11 @@ function renderFrontmatterEditor(frontmatter) {
             }
         }
 
-        if (entry.key === 'published_at_utc') {
+        if (datetimeFrontmatterKeys.includes(entry.key)) {
             input.type = 'datetime-local';
         }
 
-        input.value = entry.key === 'published_at_utc' ? toDatetimeLocalValue(entry.value) : entry.value;
+        input.value = datetimeFrontmatterKeys.includes(entry.key) ? toDatetimeLocalValue(entry.value) : entry.value;
 
         label.append(name, input);
 
@@ -545,7 +530,6 @@ async function selectArticle(folderName) {
         const indexFile = await indexFileHandle.getFile();
         const markdown = await indexFile.text();
         const frontmatter = parseArticleFrontmatter(markdown);
-
         selectedArticle = { folderName, sectionHandle, articleHandle, markdown, frontmatter };
         newAssetButton.disabled = false;
         generateImagesButton.disabled = false;
@@ -600,8 +584,10 @@ async function saveArticle() {
 
         const fields = frontmatterPanel.querySelectorAll('[data-frontmatter-key]');
         const values = new Map([...fields].map(field => [field.dataset.frontmatterKey, field.value]));
-        if (values.has('published_at_utc')) {
-            values.set('published_at_utc', fromDatetimeLocalValue(values.get('published_at_utc')));
+        for (const key of datetimeFrontmatterKeys) {
+            if (values.has(key)) {
+                values.set(key, fromDatetimeLocalValue(values.get(key)));
+            }
         }
         if (values.has('title')) {
             values.set('title', values.get('title').slice(0, articleTitleMaxLength));
@@ -949,33 +935,138 @@ markdownEditor?.addEventListener('input', () => {
     markdownEditorDirty = true;
 });
 
-markdownToolbar?.addEventListener('mousedown', event => {
-    if (event.target.closest('button')) {
-        event.preventDefault();
-    }
-});
-
-markdownToolbar?.addEventListener('click', event => {
-    const commandButton = event.target.closest('[data-markdown-command]');
-    if (commandButton) {
-        document.execCommand(commandButton.dataset.markdownCommand);
-        markdownEditorDirty = true;
-        markdownEditor.focus();
+markdownPreviewButton?.addEventListener('click', () => {
+    if (!window.marked || !window.DOMPurify) {
+        setSidebarStatus('Não foi possível carregar a prévia Markdown.', 'error');
         return;
     }
 
-    if (event.target.closest('[data-markdown-link]')) {
-        const url = window.prompt('URL do link:');
-        if (url) {
-            document.execCommand('createLink', false, url);
-            markdownEditorDirty = true;
-            markdownEditor.focus();
-        }
-    }
+    window.marked.use({ gfm: true, breaks: false });
+    const renderedMarkdown = window.marked.parse(getEditedMarkdown());
+    const sanitizedMarkdown = window.DOMPurify.sanitize(renderedMarkdown);
+    markdownPreviewShadowRoot.innerHTML = `
+        <style>
+            :host {
+                display: block;
+                padding: calc(var(--spacing) * 5);
+                color: var(--color-foreground-default-light);
+                font: inherit;
+                line-height: 1.6;
+            }
+
+            .markdown-preview-document {
+                all: initial;
+                display: block;
+                color: inherit;
+                font: inherit;
+                line-height: inherit;
+                overflow-wrap: anywhere;
+            }
+
+            .markdown-preview-document h1,
+            .markdown-preview-document h2,
+            .markdown-preview-document h3,
+            .markdown-preview-document h4,
+            .markdown-preview-document h5,
+            .markdown-preview-document h6,
+            .markdown-preview-document p,
+            .markdown-preview-document ul,
+            .markdown-preview-document ol,
+            .markdown-preview-document blockquote,
+            .markdown-preview-document pre,
+            .markdown-preview-document table {
+                margin: 0 0 1rem;
+            }
+
+            .markdown-preview-document h1,
+            .markdown-preview-document h2,
+            .markdown-preview-document h3,
+            .markdown-preview-document h4,
+            .markdown-preview-document h5,
+            .markdown-preview-document h6 {
+                color: inherit;
+                font-weight: 700;
+                line-height: 1.25;
+            }
+
+            .markdown-preview-document h1 {
+                font-size: 2rem;
+            }
+
+            .markdown-preview-document h2 {
+                font-size: 1.5rem;
+            }
+
+            .markdown-preview-document h3 {
+                font-size: 1.25rem;
+            }
+
+            .markdown-preview-document ul,
+            .markdown-preview-document ol {
+                padding-left: 2rem;
+            }
+
+            .markdown-preview-document li + li {
+                margin-top: 0.35rem;
+            }
+
+            .markdown-preview-document blockquote {
+                padding-left: 1rem;
+                border-left: 3px solid currentColor;
+                opacity: 0.8;
+            }
+
+            .markdown-preview-document pre {
+                overflow-x: auto;
+                padding: 1rem;
+                background: rgb(127 127 127 / 14%);
+            }
+
+            .markdown-preview-document code {
+                font-family: "DM Mono", monospace;
+            }
+
+            .markdown-preview-document a {
+                color: inherit;
+                text-decoration: underline;
+            }
+
+            .markdown-preview-document img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+            }
+
+            .markdown-preview-document table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .markdown-preview-document th,
+            .markdown-preview-document td {
+                padding: 0.5rem;
+                border: 1px solid currentColor;
+                text-align: left;
+            }
+
+            .markdown-preview-document > :last-child {
+                margin-bottom: 0;
+            }
+
+            :host-context(html.dark) {
+                color: var(--color-foreground-default-dark);
+            }
+        </style>
+        <div class="markdown-preview-document">${sanitizedMarkdown}</div>`;
+    markdownPreviewDialog.showModal();
 });
 
-markdownToolbar?.querySelector('[data-markdown-block]')?.addEventListener('change', event => {
-    document.execCommand('formatBlock', false, event.target.value);
-    markdownEditorDirty = true;
-    markdownEditor.focus();
+markdownPreviewCloseButton?.addEventListener('click', () => {
+    markdownPreviewDialog.close();
+});
+
+markdownPreviewDialog?.addEventListener('click', event => {
+    if (event.target === markdownPreviewDialog) {
+        markdownPreviewDialog.close();
+    }
 });

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Calendar</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main calendar-main">
+            <section class="calendar-shell" aria-labelledby="calendar-title">
+                <div class="calendar-toolbar">
+                    <div>
+                        <p class="eyebrow">STUDIO CALENDAR</p>
+                        <h1 id="calendar-title" data-calendar-title></h1>
+                    </div>
+                    <div class="calendar-navigation" aria-label="Navegação do calendário">
+                        <button class="calendar-icon-button" data-calendar-previous type="button"
+                            aria-label="Período anterior" title="Período anterior">
+                            <i class="ri-arrow-left-s-line" aria-hidden="true"></i>
+                        </button>
+                        <button class="calendar-today-button" data-calendar-today type="button">Hoje</button>
+                        <button class="calendar-icon-button" data-calendar-next type="button"
+                            aria-label="Próximo período" title="Próximo período">
+                            <i class="ri-arrow-right-s-line" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-view-switcher" role="tablist" aria-label="Visualização do calendário">
+                    <button class="calendar-view-button is-active" data-calendar-view="month" type="button" role="tab"
+                        aria-selected="true">Mês</button>
+                    <button class="calendar-view-button" data-calendar-view="week" type="button" role="tab"
+                        aria-selected="false">Semana</button>
+                    <button class="calendar-view-button" data-calendar-view="day" type="button" role="tab"
+                        aria-selected="false">Dia</button>
+                </div>
+
+                <div class="calendar-grid" data-calendar-grid aria-live="polite"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/calendar.js"></script>
+</body>
+
+</html>

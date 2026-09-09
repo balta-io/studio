@@ -61,38 +61,15 @@
                             <div class="empty-editor-state">Selecione um artigo para editar o frontmatter.</div>
                         </section>
                         <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
-                            <div class="markdown-toolbar" role="toolbar" aria-label="Formatação do conteúdo">
-                                <select data-markdown-block aria-label="Estilo do bloco" disabled>
-                                    <option value="p">Parágrafo</option>
-                                    <option value="h1">Título 1</option>
-                                    <option value="h2">Título 2</option>
-                                    <option value="h3">Título 3</option>
-                                    <option value="blockquote">Citação</option>
-                                </select>
-                                <button type="button" data-markdown-command="bold" aria-label="Negrito" title="Negrito"
-                                    disabled>
-                                    <i class="ri-bold" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" data-markdown-command="italic" aria-label="Itálico"
-                                    title="Itálico" disabled>
-                                    <i class="ri-italic" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" data-markdown-command="insertUnorderedList"
-                                    aria-label="Lista com marcadores" title="Lista com marcadores" disabled>
-                                    <i class="ri-list-unordered" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" data-markdown-command="insertOrderedList"
-                                    aria-label="Lista numerada" title="Lista numerada" disabled>
-                                    <i class="ri-list-ordered-2" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" data-markdown-link aria-label="Inserir link" title="Inserir link"
-                                    disabled>
-                                    <i class="ri-link" aria-hidden="true"></i>
-                                </button>
-                            </div>
                             <div class="markdown-editor" data-markdown-editor contenteditable="false" role="textbox"
                                 aria-multiline="true" aria-label="Conteúdo Markdown">
                                 <p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>
+                            </div>
+                            <div class="markdown-editor-actions">
+                                <button class="markdown-preview-button" data-markdown-preview type="button" disabled>
+                                    <i class="ri-eye-line" aria-hidden="true"></i>
+                                    <span>PREVIEW</span>
+                                </button>
                             </div>
                         </section>
                         <div class="main-column main-column-tertiary">
@@ -184,11 +161,24 @@
                 </div>
             </div>
         </dialog>
+
+        <dialog class="asset-dialog markdown-preview-dialog" data-markdown-preview-dialog
+            aria-labelledby="markdown-preview-title">
+            <div class="asset-dialog-form">
+                <div class="asset-dialog-header">
+                    <h2 id="markdown-preview-title">Preview</h2>
+                    <button class="asset-dialog-close" data-markdown-preview-close type="button" aria-label="Fechar"
+                        title="Fechar">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <article class="markdown-preview-content" data-markdown-preview-content></article>
+            </div>
+        </dialog>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/lib/turndown.browser.umd.min.js"></script>
     <script src="js/folder-store.js"></script>
     <script src="js/articles.js"></script>
 </body>
