@@ -2,243 +2,419 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
-    <title>Studio | Themes</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/theme.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+        <title>Studio | Themes</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="js/theme.js" defer></script>
 </head>
 
 <body>
-    <div class="app-shell">
-        <header class="app-header">
-            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
-                <i class="ri-arrow-left-line" aria-hidden="true"></i>
-                <span>BACK</span>
-            </a>
-            <div class="header-actions">
-                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
-                    title="Ativar tema escuro" aria-pressed="false">
-                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
-                    <span class="header-button-label">Theme</span>
-                </button>
-                <button class="header-button" id="settings-button" type="button" aria-label="Configurações"
-                    title="Configurações">
-                    <i class="ri-settings-3-line header-button-icon" aria-hidden="true"></i>
-                    <span class="header-button-label">Settings</span>
-                </button>
-            </div>
-        </header>
+        <div class="app-shell theme-app-shell">
+                <header class="app-header">
+                        <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                                <span>BACK</span>
+                        </a>
+                        <div class="header-actions">
+                                <button class="header-button" id="new-theme-button" type="button"
+                                        aria-label="Criar novo tema" title="Criar novo tema">
+                                        <i class="ri-add-line header-button-icon" aria-hidden="true"></i>
+                                        <span class="header-button-label">New</span>
+                                </button>
+                                <button class="header-button" id="theme-toggle" type="button"
+                                        aria-label="Ativar tema escuro" title="Ativar tema escuro" aria-pressed="false">
+                                        <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                                        <span class="header-button-label">Theme</span>
+                                </button>
+                                <button class="header-button" id="settings-button" type="button"
+                                        aria-label="Configurações" title="Configurações">
+                                        <i class="ri-settings-3-line header-button-icon" aria-hidden="true"></i>
+                                        <span class="header-button-label">Settings</span>
+                                </button>
+                        </div>
+                </header>
 
-        <div class="app-body">
-            <aside class="app-sidebar" aria-label="Themes">
-                <nav class="sidebar-list" aria-label="Menu de temas"></nav>
-            </aside>
-            <main class="themes-main">
-                <section class="theme-token-column" aria-labelledby="theme-token-heading">
-                    <h1 class="theme-token-heading" id="theme-token-heading">Theme tokens</h1>
-                    <div class="theme-token-list">
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-background-default-light</span><input
-                                class="theme-token-input" type="text" value="var(--color-base-light)"><input
-                                class="theme-token-picker" type="color" value="#ffffff"
-                                aria-label="Cor de --color-background-default-light"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-background-default-dark</span><input
-                                class="theme-token-input" type="text" value="var(--color-neutral-900)"><input
-                                class="theme-token-picker" type="color" value="#121217"
-                                aria-label="Cor de --color-background-default-dark"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-foreground-on-dark</span><input
-                                class="theme-token-input" type="text" value="var(--color-neutral-25)"><input
-                                class="theme-token-picker" type="color" value="#f8f8f8"
-                                aria-label="Cor de --color-foreground-on-dark"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-foreground-on-light</span><input
-                                class="theme-token-input" type="text" value="var(--color-neutral-25)"><input
-                                class="theme-token-picker" type="color" value="#f8f8f8"
-                                aria-label="Cor de --color-foreground-on-light"></label>
+                <div class="app-body">
+                        <aside class="app-sidebar" aria-label="Themes">
+                                <nav class="sidebar-list" aria-label="Menu de temas"></nav>
+                                <div class="folder-status theme-sidebar-status" id="theme-sidebar-status" role="status"
+                                        aria-live="polite" aria-hidden="true">
+                                        <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+                                        <span class="folder-status-message"></span>
+                                </div>
+                        </aside>
+                        <main class="themes-main">
+                                <div class="theme-editor-columns">
+                                        <section class="main-column theme-frontmatter-column" data-theme-frontmatter
+                                                aria-live="polite">
+                                                <div class="empty-editor-state">Selecione um tema para editar o
+                                                        frontmatter.</div>
+                                        </section>
+                                        <section class="theme-token-column" aria-labelledby="theme-token-heading">
+                                                <h1 class="theme-token-heading" id="theme-token-heading">Theme tokens
+                                                </h1>
+                                                <div class="theme-token-list">
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-background-default-light</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="var(--color-base-light)"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#ffffff"
+                                                                        aria-label="Cor de --color-background-default-light"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-background-default-dark</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="var(--color-neutral-900)"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#121217"
+                                                                        aria-label="Cor de --color-background-default-dark"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-foreground-on-dark</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="var(--color-neutral-25)"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#f8f8f8"
+                                                                        aria-label="Cor de --color-foreground-on-dark"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-foreground-on-light</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="var(--color-neutral-25)"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#f8f8f8"
+                                                                        aria-label="Cor de --color-foreground-on-light"></label>
 
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-25</span><input
-                                class="theme-token-input" type="text" value="#F7F5FF"><input class="theme-token-picker"
-                                type="color" value="#F7F5FF" aria-label="Cor de --color-brand-25"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-50</span><input
-                                class="theme-token-input" type="text" value="#F1EDFF"><input class="theme-token-picker"
-                                type="color" value="#F1EDFF" aria-label="Cor de --color-brand-50"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-100</span><input
-                                class="theme-token-input" type="text" value="#E3DBFF"><input class="theme-token-picker"
-                                type="color" value="#E3DBFF" aria-label="Cor de --color-brand-100"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-200</span><input
-                                class="theme-token-input" type="text" value="#C1B0FF"><input class="theme-token-picker"
-                                type="color" value="#C1B0FF" aria-label="Cor de --color-brand-200"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-300</span><input
-                                class="theme-token-input" type="text" value="#7746FF"><input class="theme-token-picker"
-                                type="color" value="#7746FF" aria-label="Cor de --color-brand-300"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-400</span><input
-                                class="theme-token-input" type="text" value="#6236E0"><input class="theme-token-picker"
-                                type="color" value="#6236E0" aria-label="Cor de --color-brand-400"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-500</span><input
-                                class="theme-token-input" type="text" value="#4F28C2"><input class="theme-token-picker"
-                                type="color" value="#4F28C2" aria-label="Cor de --color-brand-500"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-600</span><input
-                                class="theme-token-input" type="text" value="#3E1E9E"><input class="theme-token-picker"
-                                type="color" value="#3E1E9E" aria-label="Cor de --color-brand-600"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-700</span><input
-                                class="theme-token-input" type="text" value="#2E167A"><input class="theme-token-picker"
-                                type="color" value="#2E167A" aria-label="Cor de --color-brand-700"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-800</span><input
-                                class="theme-token-input" type="text" value="#1F0E54"><input class="theme-token-picker"
-                                type="color" value="#1F0E54" aria-label="Cor de --color-brand-800"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-brand-900</span><input
-                                class="theme-token-input" type="text" value="#110730"><input class="theme-token-picker"
-                                type="color" value="#110730" aria-label="Cor de --color-brand-900"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-25</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#F7F5FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#F7F5FF"
+                                                                        aria-label="Cor de --color-brand-25"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-50</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#F1EDFF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#F1EDFF"
+                                                                        aria-label="Cor de --color-brand-50"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-100</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#E3DBFF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#E3DBFF"
+                                                                        aria-label="Cor de --color-brand-100"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-200</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#C1B0FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#C1B0FF"
+                                                                        aria-label="Cor de --color-brand-200"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-300</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#7746FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#7746FF"
+                                                                        aria-label="Cor de --color-brand-300"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-400</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#6236E0"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#6236E0"
+                                                                        aria-label="Cor de --color-brand-400"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-500</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#4F28C2"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#4F28C2"
+                                                                        aria-label="Cor de --color-brand-500"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-600</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#3E1E9E"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#3E1E9E"
+                                                                        aria-label="Cor de --color-brand-600"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-700</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#2E167A"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#2E167A"
+                                                                        aria-label="Cor de --color-brand-700"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-800</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#1F0E54"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#1F0E54"
+                                                                        aria-label="Cor de --color-brand-800"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-900</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#110730"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#110730"
+                                                                        aria-label="Cor de --color-brand-900"></label>
 
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-25</span><input
-                                class="theme-token-input" type="text" value="#F5F9FF"><input class="theme-token-picker"
-                                type="color" value="#F5F9FF" aria-label="Cor de --color-brand-secondary-25"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-50</span><input
-                                class="theme-token-input" type="text" value="#EDF5FF"><input class="theme-token-picker"
-                                type="color" value="#EDF5FF" aria-label="Cor de --color-brand-secondary-50"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-100</span><input
-                                class="theme-token-input" type="text" value="#D9EBFF"><input class="theme-token-picker"
-                                type="color" value="#D9EBFF" aria-label="Cor de --color-brand-secondary-100"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-200</span><input
-                                class="theme-token-input" type="text" value="#B2D5FF"><input class="theme-token-picker"
-                                type="color" value="#B2D5FF" aria-label="Cor de --color-brand-secondary-200"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-300</span><input
-                                class="theme-token-input" type="text" value="#59A5FF"><input class="theme-token-picker"
-                                type="color" value="#59A5FF" aria-label="Cor de --color-brand-secondary-300"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-400</span><input
-                                class="theme-token-input" type="text" value="#468EE6"><input class="theme-token-picker"
-                                type="color" value="#468EE6" aria-label="Cor de --color-brand-secondary-400"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-500</span><input
-                                class="theme-token-input" type="text" value="#3577CC"><input class="theme-token-picker"
-                                type="color" value="#3577CC" aria-label="Cor de --color-brand-secondary-500"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-600</span><input
-                                class="theme-token-input" type="text" value="#265FB3"><input class="theme-token-picker"
-                                type="color" value="#265FB3" aria-label="Cor de --color-brand-secondary-600"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-700</span><input
-                                class="theme-token-input" type="text" value="#1A4999"><input class="theme-token-picker"
-                                type="color" value="#1A4999" aria-label="Cor de --color-brand-secondary-700"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-800</span><input
-                                class="theme-token-input" type="text" value="#103480"><input class="theme-token-picker"
-                                type="color" value="#103480" aria-label="Cor de --color-brand-secondary-800"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-brand-secondary-900</span><input
-                                class="theme-token-input" type="text" value="#08204D"><input class="theme-token-picker"
-                                type="color" value="#08204D" aria-label="Cor de --color-brand-secondary-900"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-25</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#F5F9FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#F5F9FF"
+                                                                        aria-label="Cor de --color-brand-secondary-25"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-50</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#EDF5FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#EDF5FF"
+                                                                        aria-label="Cor de --color-brand-secondary-50"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-100</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#D9EBFF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#D9EBFF"
+                                                                        aria-label="Cor de --color-brand-secondary-100"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-200</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#B2D5FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#B2D5FF"
+                                                                        aria-label="Cor de --color-brand-secondary-200"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-300</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#59A5FF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#59A5FF"
+                                                                        aria-label="Cor de --color-brand-secondary-300"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-400</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#468EE6"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#468EE6"
+                                                                        aria-label="Cor de --color-brand-secondary-400"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-500</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#3577CC"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#3577CC"
+                                                                        aria-label="Cor de --color-brand-secondary-500"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-600</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#265FB3"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#265FB3"
+                                                                        aria-label="Cor de --color-brand-secondary-600"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-700</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#1A4999"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#1A4999"
+                                                                        aria-label="Cor de --color-brand-secondary-700"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-800</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#103480"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#103480"
+                                                                        aria-label="Cor de --color-brand-secondary-800"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-brand-secondary-900</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#08204D"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#08204D"
+                                                                        aria-label="Cor de --color-brand-secondary-900"></label>
 
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-25</span><input
-                                class="theme-token-input" type="text" value="#FFF9F6"><input class="theme-token-picker"
-                                type="color" value="#FFF9F6" aria-label="Cor de --color-complementary-25"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-50</span><input
-                                class="theme-token-input" type="text" value="#FFF3ED"><input class="theme-token-picker"
-                                type="color" value="#FFF3ED" aria-label="Cor de --color-complementary-50"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-100</span><input
-                                class="theme-token-input" type="text" value="#FFE6D9"><input class="theme-token-picker"
-                                type="color" value="#FFE6D9" aria-label="Cor de --color-complementary-100"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-200</span><input
-                                class="theme-token-input" type="text" value="#FFDCC8"><input class="theme-token-picker"
-                                type="color" value="#FFDCC8" aria-label="Cor de --color-complementary-200"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-300</span><input
-                                class="theme-token-input" type="text" value="#FFD2B9"><input class="theme-token-picker"
-                                type="color" value="#FFD2B9" aria-label="Cor de --color-complementary-300"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-400</span><input
-                                class="theme-token-input" type="text" value="#E6B495"><input class="theme-token-picker"
-                                type="color" value="#E6B495" aria-label="Cor de --color-complementary-400"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-500</span><input
-                                class="theme-token-input" type="text" value="#CC9874"><input class="theme-token-picker"
-                                type="color" value="#CC9874" aria-label="Cor de --color-complementary-500"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-600</span><input
-                                class="theme-token-input" type="text" value="#A67859"><input class="theme-token-picker"
-                                type="color" value="#A67859" aria-label="Cor de --color-complementary-600"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-700</span><input
-                                class="theme-token-input" type="text" value="#8C6246"><input class="theme-token-picker"
-                                type="color" value="#8C6246" aria-label="Cor de --color-complementary-700"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-800</span><input
-                                class="theme-token-input" type="text" value="#664632"><input class="theme-token-picker"
-                                type="color" value="#664632" aria-label="Cor de --color-complementary-800"></label>
-                        <label class="theme-token-row"><span
-                                class="theme-token-label">--color-complementary-900</span><input
-                                class="theme-token-input" type="text" value="#332218"><input class="theme-token-picker"
-                                type="color" value="#332218" aria-label="Cor de --color-complementary-900"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-25</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#FFF9F6"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#FFF9F6"
+                                                                        aria-label="Cor de --color-complementary-25"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-50</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#FFF3ED"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#FFF3ED"
+                                                                        aria-label="Cor de --color-complementary-50"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-100</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#FFE6D9"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#FFE6D9"
+                                                                        aria-label="Cor de --color-complementary-100"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-200</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#FFDCC8"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#FFDCC8"
+                                                                        aria-label="Cor de --color-complementary-200"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-300</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#FFD2B9"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#FFD2B9"
+                                                                        aria-label="Cor de --color-complementary-300"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-400</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#E6B495"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#E6B495"
+                                                                        aria-label="Cor de --color-complementary-400"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-500</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#CC9874"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#CC9874"
+                                                                        aria-label="Cor de --color-complementary-500"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-600</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#A67859"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#A67859"
+                                                                        aria-label="Cor de --color-complementary-600"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-700</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#8C6246"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#8C6246"
+                                                                        aria-label="Cor de --color-complementary-700"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-800</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#664632"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#664632"
+                                                                        aria-label="Cor de --color-complementary-800"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-complementary-900</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#332218"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#332218"
+                                                                        aria-label="Cor de --color-complementary-900"></label>
 
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-25</span><input
-                                class="theme-token-input" type="text" value="#F8F8F8"><input class="theme-token-picker"
-                                type="color" value="#F8F8F8" aria-label="Cor de --color-neutral-25"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-50</span><input
-                                class="theme-token-input" type="text" value="#F8F8F8"><input class="theme-token-picker"
-                                type="color" value="#F8F8F8" aria-label="Cor de --color-neutral-50"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-100</span><input
-                                class="theme-token-input" type="text" value="#EBEBEF"><input class="theme-token-picker"
-                                type="color" value="#EBEBEF" aria-label="Cor de --color-neutral-100"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-200</span><input
-                                class="theme-token-input" type="text" value="#D1D1DB"><input class="theme-token-picker"
-                                type="color" value="#D1D1DB" aria-label="Cor de --color-neutral-200"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-300</span><input
-                                class="theme-token-input" type="text" value="#A9A9BC"><input class="theme-token-picker"
-                                type="color" value="#A9A9BC" aria-label="Cor de --color-neutral-300"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-400</span><input
-                                class="theme-token-input" type="text" value="#8A8AA3"><input class="theme-token-picker"
-                                type="color" value="#8A8AA3" aria-label="Cor de --color-neutral-400"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-500</span><input
-                                class="theme-token-input" type="text" value="#6C6C89"><input class="theme-token-picker"
-                                type="color" value="#6C6C89" aria-label="Cor de --color-neutral-500"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-600</span><input
-                                class="theme-token-input" type="text" value="#55556D"><input class="theme-token-picker"
-                                type="color" value="#55556D" aria-label="Cor de --color-neutral-600"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-700</span><input
-                                class="theme-token-input" type="text" value="#3F3F50"><input class="theme-token-picker"
-                                type="color" value="#3F3F50" aria-label="Cor de --color-neutral-700"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-800</span><input
-                                class="theme-token-input" type="text" value="#282833"><input class="theme-token-picker"
-                                type="color" value="#282833" aria-label="Cor de --color-neutral-800"></label>
-                        <label class="theme-token-row"><span class="theme-token-label">--color-neutral-900</span><input
-                                class="theme-token-input" type="text" value="#121217"><input class="theme-token-picker"
-                                type="color" value="#121217" aria-label="Cor de --color-neutral-900"></label>
-                    </div>
-                </section>
-            </main>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-25</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#F8F8F8"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#F8F8F8"
+                                                                        aria-label="Cor de --color-neutral-25"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-50</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#F8F8F8"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#F8F8F8"
+                                                                        aria-label="Cor de --color-neutral-50"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-100</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#EBEBEF"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#EBEBEF"
+                                                                        aria-label="Cor de --color-neutral-100"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-200</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#D1D1DB"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#D1D1DB"
+                                                                        aria-label="Cor de --color-neutral-200"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-300</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#A9A9BC"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#A9A9BC"
+                                                                        aria-label="Cor de --color-neutral-300"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-400</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#8A8AA3"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#8A8AA3"
+                                                                        aria-label="Cor de --color-neutral-400"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-500</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#6C6C89"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#6C6C89"
+                                                                        aria-label="Cor de --color-neutral-500"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-600</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#55556D"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#55556D"
+                                                                        aria-label="Cor de --color-neutral-600"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-700</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#3F3F50"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#3F3F50"
+                                                                        aria-label="Cor de --color-neutral-700"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-800</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#282833"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#282833"
+                                                                        aria-label="Cor de --color-neutral-800"></label>
+                                                        <label class="theme-token-row"><span
+                                                                        class="theme-token-label">--color-neutral-900</span><input
+                                                                        class="theme-token-input" type="text"
+                                                                        value="#121217"><input
+                                                                        class="theme-token-picker" type="color"
+                                                                        value="#121217"
+                                                                        aria-label="Cor de --color-neutral-900"></label>
+                                                </div>
+                                        </section>
+                                </div>
+                        </main>
+                </div>
+
+                <footer class="main-footer">
+                        <button class="delete-article-button" data-delete-theme type="button" disabled>
+                                <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                                <span>DELETE</span>
+                        </button>
+                        <button class="save-article-button" data-save-theme type="button" disabled>
+                                <i class="ri-save-line" aria-hidden="true"></i>
+                                <span>SALVAR INFORMAÇÕES</span>
+                        </button>
+                </footer>
         </div>
 
-        <footer class="main-footer"></footer>
-    </div>
-
-    <script>
-        document.querySelectorAll('.theme-token-row').forEach(row => {
-            const textInput = row.querySelector('.theme-token-input');
-            const colorPicker = row.querySelector('.theme-token-picker');
-            textInput.addEventListener('input', () => {
-                if (/^#[0-9a-f]{6}$/i.test(textInput.value.trim())) {
-                    colorPicker.value = textInput.value.trim();
-                }
-            });
-            colorPicker.addEventListener('input', () => {
-                textInput.value = colorPicker.value.toUpperCase();
-            });
-        });
-    </script>
+        <script src="js/folder-store.js"></script>
 </body>
 
 </html>

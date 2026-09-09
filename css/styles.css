@@ -194,6 +194,23 @@ html.dark .header-button:focus-visible {
     color: var(--color-foreground-strong-dark);
 }
 
+.header-select {
+    min-height: calc(var(--spacing) * 11);
+    padding: 0 calc(var(--spacing) * 3);
+    border: 1px solid var(--color-border-default-light);
+    background: var(--color-background-default-light);
+    color: var(--color-foreground-default-light);
+    font: inherit;
+    font-size: var(--text-sm);
+    cursor: pointer;
+}
+
+html.dark .header-select {
+    border-color: var(--color-border-default-dark);
+    background: var(--color-background-default-dark);
+    color: var(--color-foreground-default-dark);
+}
+
 .header-button:focus-visible,
 .open-folder-button:focus-visible,
 .back-button:focus-visible,
@@ -571,6 +588,17 @@ html.dark .calendar-empty-message {
     gap: calc(var(--spacing) * 4);
     width: 100%;
     min-height: 0;
+}
+
+.design-system-preview-frame {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--color-border-default-light);
+    background: var(--color-background-default-light);
+}
+
+html.dark .design-system-preview-frame {
+    border-color: var(--color-border-default-dark);
 }
 
 .main-columns-two {
@@ -1175,15 +1203,53 @@ html.dark .main-footer {
 }
 
 .themes-main {
+    display: flex;
     flex: 1;
     min-width: 0;
+    min-height: 0;
+    overflow: hidden;
     padding: calc(var(--spacing) * 8);
 }
 
-.theme-token-column {
-    width: min(100%, 760px);
-    min-height: 100%;
+.theme-app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+}
+
+.theme-app-shell .app-body {
+    flex: 1;
+    min-height: 0;
+}
+
+.theme-app-shell .main-footer {
+    flex: 0 0 auto;
+    border-top: 1px solid var(--color-border-default-light);
+    background: var(--color-background-default-light);
+}
+
+html.dark .theme-app-shell .main-footer {
+    border-top-color: var(--color-border-default-dark);
+    background: var(--color-background-elevation-dark);
+}
+
+.theme-editor-columns {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.75fr) minmax(0, 2fr);
+    gap: calc(var(--spacing) * 4);
+    width: min(100%, 1120px);
+    min-height: 0;
     margin: 0 auto;
+}
+
+.theme-frontmatter-column {
+    align-self: start;
+}
+
+.theme-token-column {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
     padding: calc(var(--spacing) * 5);
     border: 1px solid var(--color-border-default-light);
     background: var(--color-background-elevation-light);
@@ -1270,6 +1336,10 @@ html.dark .theme-token-picker {
 @media (max-width: 560px) {
     .themes-main {
         padding: calc(var(--spacing) * 4) calc(var(--spacing) * 3);
+    }
+
+    .theme-editor-columns {
+        grid-template-columns: 1fr;
     }
 
     .theme-token-column {
@@ -2040,6 +2110,45 @@ html.dark .article-filter select {
     display: flex;
     flex-direction: column;
     gap: calc(var(--spacing) * 1);
+}
+
+.theme-sidebar-status {
+    margin-top: calc(var(--spacing) * 4);
+}
+
+.sidebar-theme {
+    border: 0;
+    cursor: default;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+}
+
+.sidebar-theme-content {
+    display: grid;
+    min-width: 0;
+    gap: calc(var(--spacing) * 1);
+}
+
+.sidebar-theme-title,
+.sidebar-theme-slug {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-theme-title {
+    color: inherit;
+}
+
+.sidebar-theme-slug {
+    color: var(--color-foreground-subtle-light);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+}
+
+html.dark .sidebar-theme-slug {
+    color: var(--color-foreground-subtle-dark);
 }
 
 .sidebar-article {

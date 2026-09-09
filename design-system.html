@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Design System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell theme-app-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <select class="header-select" data-design-system-theme-select aria-label="Selecionar tema">
+                    <option value="">Tema padrão</option>
+                </select>
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+                <button class="header-button" id="settings-button" type="button" aria-label="Configurações"
+                    title="Configurações">
+                    <i class="ri-settings-3-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Settings</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <aside class="app-sidebar" aria-label="Componentes do Design System">
+                <nav class="sidebar-list" data-design-system-list aria-label="Lista de componentes"></nav>
+            </aside>
+
+            <main class="app-main">
+                <div class="main-content">
+                    <div class="empty-editor-state" data-design-system-empty>Selecione um componente para visualizar.
+                    </div>
+                    <iframe class="design-system-preview-frame" data-design-system-preview
+                        title="Pré-visualização do componente" hidden></iframe>
+                </div>
+            </main>
+        </div>
+
+        <div class="folder-status" data-design-system-status role="status" aria-live="polite" aria-hidden="true">
+            <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+            <span class="folder-status-message"></span>
+        </div>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/design-system.js"></script>
+</body>
+
+</html>
