@@ -584,7 +584,7 @@ html.dark .calendar-empty-message {
 
 .main-columns {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
     gap: calc(var(--spacing) * 4);
     width: 100%;
     min-height: 0;
@@ -1464,11 +1464,23 @@ html.dark .frontmatter-counter {
 }
 
 .markdown-panel {
-    display: flex;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     min-height: 0;
     padding: 0;
     overflow: hidden;
+}
+
+.markdown-panel-content {
+    display: flex;
+    min-height: 0;
     flex-direction: column;
+}
+
+.markdown-panel-empty {
+    display: flex;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .markdown-language-bar {

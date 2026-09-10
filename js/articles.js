@@ -11,10 +11,13 @@ const markdownPreviewDialog = document.querySelector('[data-markdown-preview-dia
 const markdownPreviewContent = document.querySelector('[data-markdown-preview-content]');
 const markdownPreviewShadowRoot = markdownPreviewContent?.attachShadow({ mode: 'open' });
 const markdownPreviewCloseButton = document.querySelector('[data-markdown-preview-close]');
-const assetsList = document.querySelector('[data-assets-list]');
-const newAssetButton = document.querySelector('[data-new-asset]');
+const postsList = document.querySelector('[data-posts-list]');
+const campaignsList = document.querySelector('[data-campaigns-list]');
+const newPostButton = document.querySelector('[data-new-post]');
+const newCampaignButton = document.querySelector('[data-new-campaign]');
 const imagesList = document.querySelector('[data-images-list]');
 const generateImagesButton = document.querySelector('[data-generate-images]');
+const articleContentDirectories = ['posts', 'campaigns'];
 const imageFileExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif'];
 const imageDialog = document.querySelector('[data-image-dialog]');
 const imageDialogTitle = document.querySelector('[data-image-dialog-title]');
@@ -100,14 +103,14 @@ function renderMarkdownEditor(markdown) {
     markdownPreviewButton.disabled = false;
 }
 
-function renderAssetFiles(fileNames) {
-    assetsList.replaceChildren();
+function renderAssetFiles(fileNames, listElement) {
+    listElement.replaceChildren();
 
     if (!fileNames.length) {
         const emptyMessage = document.createElement('li');
         emptyMessage.className = 'empty-editor-state';
         emptyMessage.textContent = 'Nenhum arquivo .txt encontrado.';
-        assetsList.append(emptyMessage);
+        listElement.append(emptyMessage);
         return;
     }
 
@@ -128,21 +131,21 @@ function renderAssetFiles(fileNames) {
 
         fileButton.append(icon, name);
         fileItem.append(fileButton);
-        assetsList.append(fileItem);
+        listElement.append(fileItem);
     }
 }
 
-async function openAssetDialog(fileName) {
+async function openAssetDialog(fileName, directoryName, listElement) {
     if (!selectedArticle) {
         return;
     }
 
     try {
-        const assetsHandle = await selectedArticle.articleHandle.getDirectoryHandle('assets');
+        const assetsHandle = await selectedArticle.articleHandle.getDirectoryHandle(directoryName);
         const fileHandle = await assetsHandle.getFileHandle(fileName);
         const file = await fileHandle.getFile();
 
-        selectedAsset = { assetsHandle, fileHandle, fileName };
+        selectedAsset = { assetsHandle, fileHandle, fileName, directoryName, listElement };
         assetDialogTitle.value = fileName;
         assetEditor.value = await file.text();
         assetSaveButton.disabled = false;
@@ -153,14 +156,14 @@ async function openAssetDialog(fileName) {
     }
 }
 
-async function openNewAssetDialog() {
+async function openNewAssetDialog(directoryName, listElement) {
     if (!selectedArticle) {
         return;
     }
 
     try {
-        const assetsHandle = await selectedArticle.articleHandle.getDirectoryHandle('assets', { create: true });
-        selectedAsset = { assetsHandle, fileHandle: null, fileName: null, isNew: true };
+        const assetsHandle = await selectedArticle.articleHandle.getDirectoryHandle(directoryName, { create: true });
+        selectedAsset = { assetsHandle, fileHandle: null, fileName: null, isNew: true, directoryName, listElement };
         assetDialogTitle.value = '';
         assetEditor.value = '';
         assetSaveButton.disabled = false;
@@ -187,9 +190,10 @@ async function deleteAsset() {
 
         await selectedAsset.assetsHandle.removeEntry(selectedAsset.fileName);
         const deletedFileName = selectedAsset.fileName;
+        const { directoryName, listElement } = selectedAsset;
         selectedAsset = null;
         assetDialog.close();
-        await loadAssetFiles(selectedArticle.articleHandle);
+        await loadAssetFiles(selectedArticle.articleHandle, directoryName, listElement);
         setSidebarStatus(`Asset "${deletedFileName}" excluído.`, 'success');
     } catch (error) {
         setSidebarStatus(error.message || 'Não foi possível excluir o asset.', 'error');
@@ -245,7 +249,7 @@ async function saveAsset(event) {
         const wasNew = selectedAsset.isNew;
         selectedAsset = { ...selectedAsset, fileHandle, fileName };
         assetDialog.close();
-        await loadAssetFiles(selectedArticle.articleHandle);
+        await loadAssetFiles(selectedArticle.articleHandle, selectedAsset.directoryName, selectedAsset.listElement);
         setSidebarStatus(wasNew
             ? `Asset "${fileName}" criado.`
             : fileName === previousFileName
@@ -258,9 +262,9 @@ async function saveAsset(event) {
     }
 }
 
-async function loadAssetFiles(articleHandle) {
+async function loadAssetFiles(articleHandle, directoryName, listElement) {
     try {
-        const assetsHandle = await articleHandle.getDirectoryHandle('assets');
+        const assetsHandle = await articleHandle.getDirectoryHandle(directoryName);
         const fileNames = [];
 
         for await (const [name, handle] of assetsHandle.entries()) {
@@ -269,9 +273,9 @@ async function loadAssetFiles(articleHandle) {
             }
         }
 
-        renderAssetFiles(fileNames.sort((first, second) => first.localeCompare(second)));
+        renderAssetFiles(fileNames.sort((first, second) => first.localeCompare(second)), listElement);
     } catch (error) {
-        renderAssetFiles([]);
+        renderAssetFiles([], listElement);
     }
 }
 
@@ -516,6 +520,12 @@ function renderFrontmatterEditor(frontmatter) {
     saveArticleButton.disabled = false;
 }
 
+async function ensureArticleContentDirectories(articleHandle) {
+    await Promise.all(articleContentDirectories.map(directoryName => (
+        articleHandle.getDirectoryHandle(directoryName, { create: true })
+    )));
+}
+
 async function selectArticle(folderName) {
     const rootHandle = await getSavedFolderHandle();
     if (!rootHandle) {
@@ -526,17 +536,22 @@ async function selectArticle(folderName) {
     try {
         const sectionHandle = await rootHandle.getDirectoryHandle(sectionSlug);
         const articleHandle = await sectionHandle.getDirectoryHandle(folderName);
+        await ensureArticleContentDirectories(articleHandle);
         const indexFileHandle = await articleHandle.getFileHandle('index.md');
         const indexFile = await indexFileHandle.getFile();
         const markdown = await indexFile.text();
         const frontmatter = parseArticleFrontmatter(markdown);
         selectedArticle = { folderName, sectionHandle, articleHandle, markdown, frontmatter };
-        newAssetButton.disabled = false;
+        newPostButton.disabled = false;
+        newCampaignButton.disabled = false;
         generateImagesButton.disabled = false;
         renderFrontmatterEditor(frontmatter);
         renderMarkdownEditor(frontmatter.body);
         deleteArticleButton.disabled = false;
-        await loadAssetFiles(articleHandle);
+        await Promise.all([
+            loadAssetFiles(articleHandle, 'posts', postsList),
+            loadAssetFiles(articleHandle, 'campaigns', campaignsList)
+        ]);
         await loadImageFiles(articleHandle);
         renderArticleList(currentArticles, folderName);
         localStorage.setItem(lastSelectedArticleStorageKey, folderName);
@@ -854,7 +869,7 @@ async function createArticle() {
         const sectionHandle = await rootHandle.getDirectoryHandle(sectionSlug, { create: true });
         const articleHandle = await sectionHandle.getDirectoryHandle(slug, { create: true });
         await articleHandle.getDirectoryHandle('images', { create: true });
-        await articleHandle.getDirectoryHandle('assets', { create: true });
+        await ensureArticleContentDirectories(articleHandle);
         const indexFileHandle = await articleHandle.getFileHandle('index.md', { create: true });
         const writable = await indexFileHandle.createWritable();
         await writable.write(createArticleFrontmatter(organizationId, title, slug));
@@ -890,13 +905,21 @@ if (articleStatusFilter) {
 
 saveArticleButton?.addEventListener('click', saveArticle);
 deleteArticleButton?.addEventListener('click', deleteArticle);
-newAssetButton?.addEventListener('click', openNewAssetDialog);
+newPostButton?.addEventListener('click', () => openNewAssetDialog('posts', postsList));
+newCampaignButton?.addEventListener('click', () => openNewAssetDialog('campaigns', campaignsList));
 generateImagesButton?.addEventListener('click', goToGenerateImages);
 
-assetsList?.addEventListener('click', event => {
+postsList?.addEventListener('click', event => {
     const fileButton = event.target.closest('[data-asset-name]');
     if (fileButton) {
-        openAssetDialog(fileButton.dataset.assetName);
+        openAssetDialog(fileButton.dataset.assetName, 'posts', postsList);
+    }
+});
+
+campaignsList?.addEventListener('click', event => {
+    const fileButton = event.target.closest('[data-asset-name]');
+    if (fileButton) {
+        openAssetDialog(fileButton.dataset.assetName, 'campaigns', campaignsList);
     }
 });
 

@@ -60,40 +60,55 @@
                         <section class="main-column main-column-primary" data-frontmatter-panel aria-live="polite">
                             <div class="empty-editor-state">Selecione um artigo para editar o frontmatter.</div>
                         </section>
-                        <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
-                            <div class="markdown-editor" data-markdown-editor contenteditable="false" role="textbox"
-                                aria-multiline="true" aria-label="Conteúdo Markdown">
-                                <p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>
-                            </div>
-                            <div class="markdown-editor-actions">
-                                <button class="markdown-preview-button" data-markdown-preview type="button" disabled>
-                                    <i class="ri-eye-line" aria-hidden="true"></i>
-                                    <span>PREVIEW</span>
-                                </button>
-                            </div>
-                        </section>
                         <div class="main-column main-column-tertiary">
                             <section class="tertiary-section">
-                                <h5>Assets</h5>
-                                <ul class="asset-file-list" data-assets-list aria-label="Arquivos de assets"></ul>
+                                <h5>Posts</h5>
+                                <ul class="asset-file-list" data-posts-list aria-label="Arquivos de posts"></ul>
                                 <footer class="asset-section-footer">
-                                    <button class="asset-new-button" data-new-asset type="button" disabled>
+                                    <button class="asset-new-button" data-new-post type="button" disabled>
                                         <i class="ri-add-line" aria-hidden="true"></i>
-                                        <span>NEW ASSET</span>
+                                        <span>NEW POST</span>
                                     </button>
                                 </footer>
                             </section>
                             <section class="tertiary-section">
-                                <h5>Images</h5>
-                                <div class="image-grid" data-images-list aria-label="Imagens do artigo"></div>
+                                <h5>Campaigns</h5>
+                                <ul class="asset-file-list" data-campaigns-list aria-label="Arquivos de campanhas"></ul>
                                 <footer class="asset-section-footer">
-                                    <button class="asset-new-button" data-generate-images type="button" disabled>
-                                        <i class="ri-image-add-line" aria-hidden="true"></i>
-                                        <span>GENERATE IMAGES</span>
+                                    <button class="asset-new-button" data-new-campaign type="button" disabled>
+                                        <i class="ri-add-line" aria-hidden="true"></i>
+                                        <span>NEW CAMPAIGN</span>
                                     </button>
                                 </footer>
                             </section>
                         </div>
+                        <section class="main-column main-column-secondary markdown-panel" data-markdown-panel>
+                            <div class="markdown-panel-empty">
+                                <section class="tertiary-section">
+                                    <h5>Images</h5>
+                                    <div class="image-grid" data-images-list aria-label="Imagens do artigo"></div>
+                                    <footer class="asset-section-footer">
+                                        <button class="asset-new-button" data-generate-images type="button" disabled>
+                                            <i class="ri-image-add-line" aria-hidden="true"></i>
+                                            <span>GENERATE IMAGES</span>
+                                        </button>
+                                    </footer>
+                                </section>
+                            </div>
+                            <div class="markdown-panel-content">
+                                <div class="markdown-editor" data-markdown-editor contenteditable="false" role="textbox"
+                                    aria-multiline="true" aria-label="Conteúdo Markdown">
+                                    <p class="empty-editor-state">Selecione um artigo para editar o conteúdo.</p>
+                                </div>
+                                <div class="markdown-editor-actions">
+                                    <button class="markdown-preview-button" data-markdown-preview type="button"
+                                        disabled>
+                                        <i class="ri-eye-line" aria-hidden="true"></i>
+                                        <span>PREVIEW</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <footer class="main-footer">
                         <button class="delete-article-button" data-delete-article type="button" disabled>
