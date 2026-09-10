@@ -4,7 +4,7 @@ const lastSelectedThemeStorageKey = 'studio-themes-last-theme';
 const newThemeButton = document.querySelector('#new-theme-button');
 const themeList = document.querySelector('.sidebar-list');
 const themeSidebarStatus = document.querySelector('#theme-sidebar-status');
-const frontmatterPanel = document.querySelector('[data-theme-frontmatter]');
+const themeFrontmatterPanel = document.querySelector('[data-theme-frontmatter]');
 const saveThemeButton = document.querySelector('[data-save-theme]');
 const deleteThemeButton = document.querySelector('[data-delete-theme]');
 const tokenRows = [...document.querySelectorAll('.theme-token-row')];
@@ -110,9 +110,9 @@ function loadThemeTokens(body = '') {
 }
 
 function renderFrontmatterEditor(frontmatter) {
-    frontmatterPanel.replaceChildren();
+    themeFrontmatterPanel.replaceChildren();
     if (!frontmatter.entries.length) {
-        frontmatterPanel.innerHTML = '<div class="empty-editor-state">Este tema não possui frontmatter.</div>';
+        themeFrontmatterPanel.innerHTML = '<div class="empty-editor-state">Este tema não possui frontmatter.</div>';
         return;
     }
 
@@ -131,7 +131,7 @@ function renderFrontmatterEditor(frontmatter) {
         label.append(name, input);
         form.append(label);
     }
-    frontmatterPanel.append(form);
+    themeFrontmatterPanel.append(form);
 }
 
 function renderThemeList(themes, selectedFolderName = null) {
@@ -163,7 +163,7 @@ function renderThemeList(themes, selectedFolderName = null) {
 
 function resetThemeEditor() {
     selectedTheme = null;
-    frontmatterPanel.innerHTML = '<div class="empty-editor-state">Selecione um tema para editar o frontmatter.</div>';
+    themeFrontmatterPanel.innerHTML = '<div class="empty-editor-state">Selecione um tema para editar o frontmatter.</div>';
     loadThemeTokens();
     saveThemeButton.disabled = true;
     deleteThemeButton.disabled = true;
@@ -341,7 +341,7 @@ async function saveTheme() {
         if (permission !== 'granted') {
             throw new Error('Conceda acesso de escrita à pasta para salvar o tema.');
         }
-        const fields = frontmatterPanel.querySelectorAll('[data-frontmatter-key]');
+        const fields = themeFrontmatterPanel.querySelectorAll('[data-frontmatter-key]');
         const values = new Map([...fields].map(field => [field.dataset.frontmatterKey, field.value.trim()]));
         const newFolderName = values.get('slug');
         if (!newFolderName) {
@@ -402,19 +402,21 @@ async function deleteTheme() {
     }
 }
 
-for (const row of tokenRows) {
-    const textInput = row.querySelector('.theme-token-input');
-    const colorPicker = row.querySelector('.theme-token-picker');
-    textInput.addEventListener('input', () => syncColorPicker(textInput, colorPicker));
-    colorPicker.addEventListener('input', () => {
-        textInput.value = colorPicker.value.toUpperCase();
+if (newThemeButton && saveThemeButton && deleteThemeButton) {
+    for (const row of tokenRows) {
+        const textInput = row.querySelector('.theme-token-input');
+        const colorPicker = row.querySelector('.theme-token-picker');
+        textInput.addEventListener('input', () => syncColorPicker(textInput, colorPicker));
+        colorPicker.addEventListener('input', () => {
+            textInput.value = colorPicker.value.toUpperCase();
+        });
+    }
+
+    newThemeButton.addEventListener('click', createTheme);
+    saveThemeButton.addEventListener('click', saveTheme);
+    deleteThemeButton.addEventListener('click', deleteTheme);
+    loadThemes(localStorage.getItem(lastSelectedThemeStorageKey)).catch(error => {
+        resetThemeEditor();
+        setThemeSidebarStatus(error.message || 'Não foi possível carregar os temas.', 'error');
     });
 }
-
-newThemeButton.addEventListener('click', createTheme);
-saveThemeButton.addEventListener('click', saveTheme);
-deleteThemeButton.addEventListener('click', deleteTheme);
-loadThemes(localStorage.getItem(lastSelectedThemeStorageKey)).catch(error => {
-    resetThemeEditor();
-    setThemeSidebarStatus(error.message || 'Não foi possível carregar os temas.', 'error');
-});

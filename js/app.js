@@ -1,8 +1,10 @@
 const openFolderButton = document.querySelector('#open-folder-button');
 const folderStatus = document.querySelector('#folder-status');
 const folderCardList = document.querySelector('#folder-card-list');
+const folderSearch = document.querySelector('#folder-search');
 
 const requiredFrontmatter = ['organization_id', 'title', 'slug', 'summary'];
+let loadedProjects = [];
 
 function setFolderStatus(message, type = '') {
     folderStatus.querySelector('.folder-status-message').textContent = message;
@@ -140,6 +142,18 @@ function renderProjects(projects) {
     }
 }
 
+function filterProjects() {
+    const query = folderSearch.value.trim().toLocaleLowerCase();
+    const filteredProjects = loadedProjects.filter(project => [
+        project.folderName,
+        project.title,
+        project.summary,
+        project.slug
+    ].some(value => value.toLocaleLowerCase().includes(query)));
+
+    renderProjects(filteredProjects);
+}
+
 async function restoreLastFolder() {
     try {
         const directoryHandle = await getSavedFolderHandle();
@@ -156,7 +170,8 @@ async function restoreLastFolder() {
         const { organizationId, projects } = await validateFolder(directoryHandle);
         await rememberApplicationFolder(directoryHandle);
         saveFolderMetadata(directoryHandle, organizationId);
-        renderProjects(projects);
+        loadedProjects = projects;
+        filterProjects();
         setFolderStatus(`${projects.length} projeto(s) carregado(s) de "${directoryHandle.name}".`, 'success');
     } catch (error) {
         if (error.name === 'NotFoundError') {
@@ -186,7 +201,8 @@ async function openFolder() {
         await saveFolderHandle(directoryHandle);
         await rememberApplicationFolder(directoryHandle);
         saveFolderMetadata(directoryHandle, organizationId);
-        renderProjects(projects);
+        loadedProjects = projects;
+        filterProjects();
         setFolderStatus(`${projects.length} projeto(s) carregado(s) de "${directoryHandle.name}".`, 'success');
     } catch (error) {
         if (error.name === 'AbortError') {
@@ -206,4 +222,5 @@ async function openFolder() {
 if (openFolderButton) {
     restoreLastFolder();
     openFolderButton.addEventListener('click', openFolder);
+    folderSearch.addEventListener('input', filterProjects);
 }

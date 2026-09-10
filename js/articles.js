@@ -808,8 +808,11 @@ async function loadArticles(selectedFolderName = null) {
             const indexFile = await indexFileHandle.getFile();
             entries.push({ folderName: folder.name, ...extractArticleMetadata(await indexFile.text()) });
         } catch (error) {
-            // Cancel the whole load: every subfolder must have an index.md.
-            setSidebarStatus(`A subpasta "${folder.name}" precisa conter um arquivo index.md.`, 'error');
+            if (error.name === 'NotFoundError') {
+                continue;
+            }
+
+            setSidebarStatus(`Não foi possível carregar a subpasta "${folder.name}": ${error.message}`, 'error');
             return;
         }
     }
