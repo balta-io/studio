@@ -1096,6 +1096,21 @@ html.dark .snippet-preview-scroll {
     max-height: calc(100vh - 180px);
 }
 
+.template-image-dialog {
+    width: min(92vw, 960px) !important;
+    max-height: calc(100vh - calc(var(--spacing) * 8));
+    overflow: hidden;
+}
+
+.template-image-dialog-form {
+    max-height: calc(100vh - calc(var(--spacing) * 8));
+    overflow: hidden;
+}
+
+.template-image-dialog-preview {
+    max-height: calc(100vh - 180px);
+}
+
 .tertiary-section {
     display: flex;
     flex-direction: column;
@@ -1172,6 +1187,99 @@ html.dark .asset-file-button:focus-visible {
     gap: calc(var(--spacing) * 2);
     overflow-y: auto;
     align-content: start;
+}
+
+.templates-view {
+    overflow-y: auto;
+}
+
+.templates-header {
+    margin-bottom: calc(var(--spacing) * 6);
+}
+
+.template-card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: calc(var(--spacing) * 4);
+}
+
+.template-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: calc(var(--spacing) * 3);
+    border: 1px solid var(--color-border-default-light);
+    background: var(--color-background-elevation-light);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+html.dark .template-card {
+    border-color: var(--color-border-default-dark);
+    background: var(--color-background-elevation-dark);
+}
+
+.template-card:hover,
+.template-card:focus-visible {
+    border-color: var(--color-border-primary-default-light);
+}
+
+html.dark .template-card:hover,
+html.dark .template-card:focus-visible {
+    border-color: var(--color-border-primary-default-dark);
+}
+
+.template-card-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--color-border-default-light);
+    object-fit: cover;
+}
+
+.template-editor-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 4fr);
+}
+
+.template-editor-menu {
+    overflow-y: auto;
+}
+
+.template-editor-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing) * 4);
+    border: 1px solid var(--color-border-default-light);
+    background: var(--color-background-elevation-light);
+}
+
+html.dark .template-editor-canvas {
+    border-color: var(--color-border-default-dark);
+    background: var(--color-background-elevation-dark);
+}
+
+.template-editor-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+html.dark .template-card-thumb {
+    border-color: var(--color-border-default-dark);
+}
+
+.template-card-name {
+    margin-top: calc(var(--spacing) * 3);
+    overflow-wrap: anywhere;
+    color: var(--color-foreground-strong-light);
+    font-size: var(--text-sm);
+}
+
+html.dark .template-card-name {
+    color: var(--color-foreground-strong-dark);
 }
 
 .image-grid-empty {

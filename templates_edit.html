@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Editar Template</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" href="templates.html" aria-label="Voltar para os templates" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <a class="header-button" href="templates_edit.html" aria-label="Criar novo template"
+                    title="Criar novo template">
+                    <i class="ri-add-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Novo</span>
+                </a>
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="main-content">
+                <div class="main-columns template-editor-columns">
+                    <aside class="main-column template-editor-menu" aria-label="Menu do template">
+                        <div class="sidebar-list" data-template-menu></div>
+                    </aside>
+                    <section class="main-column main-column-primary templates-view"
+                        aria-labelledby="template-editor-title">
+                        <div class="editor-heading">
+                            <span class="editor-eyebrow">TEMPLATE</span>
+                            <h1 id="template-editor-title" data-template-title>Novo template</h1>
+                        </div>
+
+                        <div class="template-editor-canvas" data-template-canvas>
+                            <img class="template-editor-image" data-template-image alt="" hidden>
+                            <p class="empty-editor-state" data-template-empty>Nenhuma imagem carregada.</p>
+                        </div>
+                    </section>
+                </div>
+                <footer class="main-footer">
+                    <span></span>
+                    <button class="save-article-button" data-save-template type="button" disabled>
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span>SAVE</span>
+                    </button>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="folder-status" data-page-status role="status" aria-live="polite" aria-hidden="true">
+        <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+        <span class="folder-status-message"></span>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/templates-edit.js"></script>
+</body>
+
+</html>

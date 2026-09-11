@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Templates</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" aria-label="Voltar para o Studio" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="main-content">
+                <section class="main-column main-column-primary templates-view" aria-labelledby="templates-title">
+                    <div class="articles-view-header templates-header">
+                        <div>
+                            <h1 id="templates-title">Templates</h1>
+                        </div>
+                        <span class="articles-count" data-templates-count aria-live="polite"></span>
+                    </div>
+                    <div class="template-card-list" data-templates-grid aria-label="Templates de imagem"></div>
+                </section>
+                <footer class="main-footer">
+                    <span></span>
+                    <button class="save-article-button" data-save-template type="button" disabled>
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span>SAVE</span>
+                    </button>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="folder-status" data-page-status role="status" aria-live="polite" aria-hidden="true">
+        <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+        <span class="folder-status-message"></span>
+    </div>
+
+    <dialog class="asset-dialog template-image-dialog" data-template-image-dialog
+        aria-labelledby="template-image-dialog-title">
+        <div class="asset-dialog-form template-image-dialog-form">
+            <div class="asset-dialog-header">
+                <h2 id="template-image-dialog-title" data-template-image-dialog-title>Template</h2>
+                <button class="asset-dialog-close" data-template-image-dialog-close type="button" aria-label="Fechar"
+                    title="Fechar">
+                    <i class="ri-close-line" aria-hidden="true"></i>
+                </button>
+            </div>
+            <img class="image-dialog-preview template-image-dialog-preview" data-template-image-dialog-preview alt="">
+            <div class="asset-dialog-actions">
+                <button class="asset-dialog-button asset-dialog-delete" data-template-image-delete type="button">
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span>DELETE</span>
+                </button>
+                <button class="asset-dialog-button asset-dialog-save" data-template-image-edit type="button">
+                    <i class="ri-edit-line" aria-hidden="true"></i>
+                    <span>EDIT TEMPLATE</span>
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/templates.js"></script>
+</body>
+
+</html>
