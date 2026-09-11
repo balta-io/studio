@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Publicar</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell publish-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" data-history-back aria-label="Voltar" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main publish-main">
+            <section class="publish-view" aria-labelledby="publish-title">
+                <div class="publish-view-header">
+                    <p class="eyebrow" data-publish-type></p>
+                    <h1 id="publish-title" data-publish-title></h1>
+                    <p class="publish-file-path" data-publish-path></p>
+                </div>
+
+                <div class="publish-columns">
+                    <section class="publish-column" aria-labelledby="publish-images-title">
+                        <div class="publish-column-header">
+                            <i class="ri-image-line" aria-hidden="true"></i>
+                            <h2 id="publish-images-title">Imagens</h2>
+                            <span data-publish-count="images" aria-live="polite"></span>
+                        </div>
+                        <div class="publish-file-list" data-publish-list="images" aria-live="polite"></div>
+                    </section>
+
+                    <section class="publish-column" aria-labelledby="publish-posts-title">
+                        <div class="publish-column-header">
+                            <i class="ri-article-line" aria-hidden="true"></i>
+                            <h2 id="publish-posts-title">Posts</h2>
+                            <span data-publish-count="posts" aria-live="polite"></span>
+                        </div>
+                        <div class="publish-file-list" data-publish-list="posts" aria-live="polite"></div>
+                    </section>
+
+                    <section class="publish-column" aria-labelledby="publish-campaigns-title">
+                        <div class="publish-column-header">
+                            <i class="ri-megaphone-line" aria-hidden="true"></i>
+                            <h2 id="publish-campaigns-title">Campanhas</h2>
+                            <span data-publish-count="campaigns" aria-live="polite"></span>
+                        </div>
+                        <div class="publish-file-list" data-publish-list="campaigns" aria-live="polite"></div>
+                    </section>
+                </div>
+            </section>
+        </main>
+
+        <div class="folder-status" data-publish-status role="status" aria-live="polite" aria-hidden="true">
+            <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+            <span class="folder-status-message"></span>
+        </div>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="js/publish.js"></script>
+</body>
+
+</html>

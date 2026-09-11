@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
+    <title>Studio | Markdown Editor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body>
+    <div class="app-shell markdown-editor-shell">
+        <header class="app-header">
+            <a class="back-button" href="index.html" data-history-back aria-label="Voltar" title="Voltar">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                <span>BACK</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="header-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro"
+                    title="Ativar tema escuro" aria-pressed="false">
+                    <i class="ri-moon-line header-button-icon" aria-hidden="true"></i>
+                    <span class="header-button-label">Theme</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main markdown-editor-main">
+            <section class="markdown-editor-layout" aria-label="Editor de Markdown">
+                <div class="markdown-editor-pane">
+                    <div class="markdown-editor-source">
+                        <div class="markdown-editor-frontmatter">
+                            <label class="frontmatter-field" for="markdown-editor-title">
+                                <span>Title</span>
+                                <input id="markdown-editor-title" data-markdown-editor-field="title" type="text"
+                                    maxlength="80">
+                                <small class="frontmatter-counter" data-markdown-editor-counter="title"></small>
+                            </label>
+                            <label class="frontmatter-field" for="markdown-editor-slug">
+                                <span>Slug</span>
+                                <input id="markdown-editor-slug" data-markdown-editor-field="slug" type="text"
+                                    maxlength="160">
+                                <small class="frontmatter-counter" data-markdown-editor-counter="slug"></small>
+                            </label>
+                            <label class="frontmatter-field" for="markdown-editor-summary">
+                                <span>Summary</span>
+                                <textarea id="markdown-editor-summary" data-markdown-editor-field="summary" rows="3"
+                                    maxlength="160"></textarea>
+                                <small class="frontmatter-counter" data-markdown-editor-counter="summary"></small>
+                            </label>
+                        </div>
+                        <textarea class="markdown-editor-input" data-markdown-editor-input
+                            aria-label="Conteúdo Markdown" spellcheck="false"
+                            placeholder="Carregando conteúdo..."></textarea>
+                    </div>
+                </div>
+                <div class="markdown-editor-pane markdown-editor-preview" data-markdown-editor-preview
+                    aria-label="Pré-visualização" style="overflow: auto;"></div>
+            </section>
+        </main>
+
+        <footer class="markdown-editor-footer">
+            <span data-markdown-editor-location></span>
+            <div class="markdown-editor-footer-actions">
+                <button class="markdown-editor-save-button" data-markdown-editor-save type="button">SAVE</button>
+                <button class="markdown-editor-publish-button" data-markdown-editor-publish
+                    type="button">PUBLISH</button>
+            </div>
+        </footer>
+
+        <div class="folder-status" data-markdown-editor-status role="status" aria-live="polite" aria-hidden="true">
+            <i class="ri-information-line folder-status-icon" aria-hidden="true"></i>
+            <span class="folder-status-message"></span>
+        </div>
+    </div>
+
+    <script src="js/folder-store.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/markdown-editor.js"></script>
+</body>
+
+</html>
