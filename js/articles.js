@@ -178,17 +178,19 @@ function renderArticles(articles) {
     }
 
     for (const article of articles) {
-        const card = document.createElement('a');
+        const card = document.createElement('div');
         card.className = 'article-card';
-        card.href = `markdown-editor.html?${new URLSearchParams({
+
+        const queryParams = new URLSearchParams({
             type: 'articles',
             content: article.slug || article.folderName
-        })}`;
-        card.setAttribute('aria-label', `Editar ${article.title || article.folderName}`);
+        });
 
-        const icon = document.createElement('i');
-        icon.className = `ri-article-line article-card-icon article-card-icon-status-${getArticleStatusClass(article.status)}`;
-        icon.setAttribute('aria-hidden', 'true');
+        const image = document.createElement('img');
+        image.className = 'article-card-image';
+        image.src = 'https://placehold.co/230x160';
+        image.alt = '';
+        image.setAttribute('aria-hidden', 'true');
 
         const content = document.createElement('div');
         content.className = 'article-card-content';
@@ -200,12 +202,24 @@ function renderArticles(articles) {
         const title = document.createElement('h2');
         title.textContent = article.title || article.folderName;
 
-        const summary = document.createElement('p');
-        summary.className = 'article-card-summary';
-        summary.textContent = article.summary || 'Sem sumário.';
+        const footer = document.createElement('div');
+        footer.className = 'article-card-footer';
 
-        content.append(folder, title, summary, createArticleMeta(article));
-        card.append(icon, content);
+        const editLink = document.createElement('a');
+        editLink.className = 'article-card-action article-card-action-edit';
+        editLink.href = `markdown-editor.html?${queryParams}`;
+        editLink.textContent = 'Editar';
+        editLink.setAttribute('aria-label', `Editar ${article.title || article.folderName}`);
+
+        const publishLink = document.createElement('a');
+        publishLink.className = 'article-card-action article-card-action-publish';
+        publishLink.href = `publish.html?${queryParams}`;
+        publishLink.textContent = 'Publicar';
+        publishLink.setAttribute('aria-label', `Publicar ${article.title || article.folderName}`);
+
+        footer.append(editLink, publishLink);
+        content.append(folder, title, createArticleMeta(article), footer);
+        card.append(image, content);
         articleCardList.append(card);
     }
 }

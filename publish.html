@@ -43,10 +43,20 @@
                             <span data-publish-count="images" aria-live="polite"></span>
                         </div>
                         <div class="publish-file-list" data-publish-list="images" aria-live="polite"></div>
-                        <a class="save-article-button publish-new-image-button" data-new-image-link href="images.html">
-                            <i class="ri-add-line" aria-hidden="true"></i>
-                            <span>NEW</span>
-                        </a>
+                        <div class="publish-column-actions">
+                            <a class="save-article-button publish-new-image-button" data-new-image-link
+                                href="images.html">
+                                <i class="ri-add-line" aria-hidden="true"></i>
+                                <span>NEW</span>
+                            </a>
+                            <button class="save-article-button publish-upload-image-button" data-upload-image-button
+                                type="button">
+                                <i class="ri-upload-2-line" aria-hidden="true"></i>
+                                <span>UPLOAD</span>
+                            </button>
+                            <input type="file" data-upload-image-input accept="image/*,.png,.jpg,.jpeg,.webp,.gif,.svg"
+                                multiple hidden>
+                        </div>
                     </section>
 
                     <section class="publish-column" aria-labelledby="publish-posts-title">
@@ -56,6 +66,10 @@
                             <span data-publish-count="posts" aria-live="polite"></span>
                         </div>
                         <div class="publish-file-list" data-publish-list="posts" aria-live="polite"></div>
+                        <button class="save-article-button publish-new-image-button" data-new-post-button type="button">
+                            <i class="ri-add-line" aria-hidden="true"></i>
+                            <span>NEW</span>
+                        </button>
                     </section>
 
                     <section class="publish-column" aria-labelledby="publish-campaigns-title">
@@ -65,6 +79,11 @@
                             <span data-publish-count="campaigns" aria-live="polite"></span>
                         </div>
                         <div class="publish-file-list" data-publish-list="campaigns" aria-live="polite"></div>
+                        <button class="save-article-button publish-new-image-button" data-new-campaign-button
+                            type="button">
+                            <i class="ri-add-line" aria-hidden="true"></i>
+                            <span>NEW</span>
+                        </button>
                     </section>
                 </div>
             </section>
@@ -75,6 +94,68 @@
             <span class="folder-status-message"></span>
         </div>
     </div>
+
+    <dialog class="asset-dialog" data-post-dialog aria-labelledby="post-dialog-title">
+        <form class="asset-dialog-form" data-post-form>
+            <div class="asset-dialog-header">
+                <h2 id="post-dialog-title" data-post-dialog-title>Novo post</h2>
+                <button class="asset-dialog-close" data-post-dialog-close type="button" aria-label="Fechar"
+                    title="Fechar">
+                    <i class="ri-close-line" aria-hidden="true"></i>
+                </button>
+            </div>
+            <select class="asset-dialog-select" data-post-network aria-label="Rede social">
+                <option value="Discord">Discord</option>
+                <option value="Instagram">Instagram</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="YouTube">YouTube</option>
+            </select>
+            <input class="asset-dialog-title" data-post-published-at type="datetime-local"
+                aria-label="Published at (UTC)">
+            <textarea class="asset-dialog-editor" data-post-message aria-label="Mensagem do post"></textarea>
+            <div class="asset-dialog-actions">
+                <button class="asset-dialog-button asset-dialog-delete" data-post-delete type="button" hidden>
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span>DELETE</span>
+                </button>
+                <button class="asset-dialog-button asset-dialog-save" data-post-save type="button">
+                    <i class="ri-save-line" aria-hidden="true"></i>
+                    <span>Salvar</span>
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="asset-dialog" data-campaign-dialog aria-labelledby="campaign-dialog-title">
+        <form class="asset-dialog-form" data-campaign-form>
+            <div class="asset-dialog-header">
+                <h2 id="campaign-dialog-title" data-campaign-dialog-title>Nova campanha</h2>
+                <button class="asset-dialog-close" data-campaign-dialog-close type="button" aria-label="Fechar"
+                    title="Fechar">
+                    <i class="ri-close-line" aria-hidden="true"></i>
+                </button>
+            </div>
+            <input class="asset-dialog-title" data-campaign-title type="text" maxlength="80" placeholder="Title"
+                aria-label="Title">
+            <input class="asset-dialog-title" data-campaign-subtitle type="text" maxlength="80" placeholder="Subtitle"
+                aria-label="Subtitle">
+            <input class="asset-dialog-title" data-campaign-published-at type="datetime-local"
+                aria-label="Published at (UTC)">
+            <textarea class="asset-dialog-editor" data-campaign-content aria-label="Content"
+                placeholder="Content"></textarea>
+            <div class="asset-dialog-actions">
+                <button class="asset-dialog-button asset-dialog-delete" data-campaign-delete type="button" hidden>
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span>DELETE</span>
+                </button>
+                <button class="asset-dialog-button asset-dialog-save" data-campaign-save type="button">
+                    <i class="ri-save-line" aria-hidden="true"></i>
+                    <span>Salvar</span>
+                </button>
+            </div>
+        </form>
+    </dialog>
 
     <dialog class="asset-dialog publish-image-dialog" data-publish-image-dialog
         aria-labelledby="publish-image-dialog-title">
