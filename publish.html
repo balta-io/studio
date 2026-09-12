@@ -43,6 +43,10 @@
                             <span data-publish-count="images" aria-live="polite"></span>
                         </div>
                         <div class="publish-file-list" data-publish-list="images" aria-live="polite"></div>
+                        <a class="save-article-button publish-new-image-button" data-new-image-link href="images.html">
+                            <i class="ri-add-line" aria-hidden="true"></i>
+                            <span>NEW</span>
+                        </a>
                     </section>
 
                     <section class="publish-column" aria-labelledby="publish-posts-title">
@@ -71,6 +75,26 @@
             <span class="folder-status-message"></span>
         </div>
     </div>
+
+    <dialog class="asset-dialog publish-image-dialog" data-publish-image-dialog
+        aria-labelledby="publish-image-dialog-title">
+        <div class="asset-dialog-form">
+            <div class="asset-dialog-header">
+                <h2 id="publish-image-dialog-title" data-publish-image-dialog-title>Imagem</h2>
+                <button class="asset-dialog-close" data-publish-image-dialog-close type="button" aria-label="Fechar"
+                    title="Fechar">
+                    <i class="ri-close-line" aria-hidden="true"></i>
+                </button>
+            </div>
+            <img class="image-dialog-preview" data-publish-image-dialog-preview alt="">
+            <div class="asset-dialog-actions">
+                <button class="asset-dialog-button asset-dialog-delete" data-publish-image-delete type="button">
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span>DELETE</span>
+                </button>
+            </div>
+        </div>
+    </dialog>
 
     <script src="js/folder-store.js"></script>
     <script src="js/publish.js"></script>

@@ -49,6 +49,18 @@ function setPageStatus(message, type = '') {
     }
 }
 
+function cleanFrontmatterValue(value) {
+    const trimmedValue = value.trim();
+    const firstCharacter = trimmedValue[0];
+    const lastCharacter = trimmedValue.at(-1);
+
+    if ((firstCharacter === '"' || firstCharacter === "'") && lastCharacter === firstCharacter) {
+        return trimmedValue.slice(1, -1);
+    }
+
+    return trimmedValue;
+}
+
 function parseFrontmatter(markdown) {
     const frontmatterMatch = markdown.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
     if (!frontmatterMatch) {
@@ -63,7 +75,7 @@ function parseFrontmatter(markdown) {
 
         metadata.push({
             key: line.slice(0, separatorIndex).trim(),
-            value: line.slice(separatorIndex + 1).trim()
+            value: cleanFrontmatterValue(line.slice(separatorIndex + 1))
         });
         return metadata;
     }, []);

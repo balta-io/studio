@@ -7,12 +7,22 @@ const publishLists = Object.fromEntries([...document.querySelectorAll('[data-pub
 const publishCounts = Object.fromEntries([...document.querySelectorAll('[data-publish-count]')]
     .map(element => [element.dataset.publishCount, element]));
 const historyBackButton = document.querySelector('[data-history-back]');
+const newImageLink = document.querySelector('[data-new-image-link]');
+const publishImageDialog = document.querySelector('[data-publish-image-dialog]');
+const publishImageDialogTitle = document.querySelector('[data-publish-image-dialog-title]');
+const publishImageDialogPreview = document.querySelector('[data-publish-image-dialog-preview]');
+const publishImageDialogCloseButton = document.querySelector('[data-publish-image-dialog-close]');
+const publishImageDeleteButton = document.querySelector('[data-publish-image-delete]');
 
 const publishDirectories = {
     images: { extension: '.png', icon: 'ri-image-line', label: 'imagem' },
     posts: { extension: '.md', icon: 'ri-file-text-line', label: 'post' },
     campaigns: { extension: '.md', icon: 'ri-file-text-line', label: 'campanha' }
 };
+
+let currentContentHandle = null;
+let selectedImage = null;
+let selectedImageUrl = null;
 
 historyBackButton.addEventListener('click', event => {
     if (window.history.length > 1) {
@@ -77,6 +87,7 @@ function renderFiles(directory, files) {
             image.alt = file.name;
             image.title = file.name;
             image.addEventListener('load', () => URL.revokeObjectURL(imageUrl), { once: true });
+            image.addEventListener('click', () => openPublishImageDialog(file));
             item.append(image);
             list.append(item);
             continue;
@@ -112,9 +123,56 @@ async function getDirectoryFiles(contentHandle, directory) {
     }
 }
 
+function openPublishImageDialog(file) {
+    if (selectedImageUrl) {
+        URL.revokeObjectURL(selectedImageUrl);
+    }
+
+    selectedImage = file;
+    selectedImageUrl = URL.createObjectURL(file.file);
+    publishImageDialogTitle.textContent = file.name;
+    publishImageDialogPreview.src = selectedImageUrl;
+    publishImageDialogPreview.alt = file.name;
+    publishImageDialog.showModal();
+}
+
+async function reloadPublishImages() {
+    const files = await getDirectoryFiles(currentContentHandle, 'images');
+    renderFiles('images', files);
+}
+
+async function deletePublishImage() {
+    if (!selectedImage || !currentContentHandle
+        || !window.confirm(`Excluir a imagem "${selectedImage.name}"?`)) {
+        return;
+    }
+
+    publishImageDeleteButton.disabled = true;
+    try {
+        const rootHandle = await getSavedFolderHandle();
+        const permission = await rootHandle.requestPermission({ mode: 'readwrite' });
+        if (permission !== 'granted') {
+            throw new Error('Conceda acesso de escrita à pasta para excluir a imagem.');
+        }
+
+        const imagesHandle = await currentContentHandle.getDirectoryHandle('images');
+        const deletedName = selectedImage.name;
+        await imagesHandle.removeEntry(deletedName);
+        publishImageDialog.close();
+        await reloadPublishImages();
+        setPublishStatus(`Imagem "${deletedName}" excluída.`, 'success');
+    } catch (error) {
+        setPublishStatus(error.message || 'Não foi possível excluir a imagem.', 'error');
+    } finally {
+        publishImageDeleteButton.disabled = false;
+    }
+}
+
 async function loadPublishContent() {
     try {
         const { type, content } = getContentLocation();
+        const imageParameters = new URLSearchParams({ type, content });
+        newImageLink.href = `images.html?${imageParameters}`;
         const rootHandle = await getSavedFolderHandle();
 
         if (!rootHandle) {
@@ -128,6 +186,7 @@ async function loadPublishContent() {
 
         const typeHandle = await rootHandle.getDirectoryHandle(type);
         const contentHandle = await typeHandle.getDirectoryHandle(content);
+        currentContentHandle = contentHandle;
         const indexFileHandle = await contentHandle.getFileHandle('index.md');
         const indexFile = await indexFileHandle.getFile();
         const entries = await Promise.all(Object.keys(publishDirectories)
@@ -155,3 +214,14 @@ async function loadPublishContent() {
 }
 
 loadPublishContent();
+
+publishImageDialogCloseButton.addEventListener('click', () => publishImageDialog.close());
+publishImageDeleteButton.addEventListener('click', deletePublishImage);
+publishImageDialog.addEventListener('close', () => {
+    if (selectedImageUrl) {
+        URL.revokeObjectURL(selectedImageUrl);
+        selectedImageUrl = null;
+    }
+    selectedImage = null;
+    publishImageDialogPreview.removeAttribute('src');
+});
